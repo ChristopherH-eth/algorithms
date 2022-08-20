@@ -2,7 +2,8 @@
 
 /**
  * @file Stack.h
- * @author 0xChristopher
+ * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
+ *         C++ conversion by 0xChristopher
  * @brief The Stack class is used as a template for different stack types (see IntStack.h).
  */
 

@@ -6,7 +6,8 @@
 
 /**
  * @file IntStack.h
- * @author 0xChristopher
+ * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
+ *         C++ conversion by 0xChristopher
  * @brief The IntStack class inherits the Stack class and elaborates on the design to create a workable stack
  * for integers.
  */
