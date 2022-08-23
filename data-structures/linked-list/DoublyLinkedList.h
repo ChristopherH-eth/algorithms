@@ -117,16 +117,19 @@ class DoublyLinkedList {
                 throw "List is empty";
             }
 
+            // Get head data and move head pointer forward one node
             T data = head->data;
             head = head->next;
             size--;
 
+            // If the list is empty, set the tail to null; else, memory cleanup
             if (isEmpty()) {
                 tail = NULL;
             } else {
                 head->previous = NULL;
             }
 
+            // Return node data
             return data;
         }
 
@@ -136,21 +139,25 @@ class DoublyLinkedList {
                 throw "List is empty";
             }
 
+            // Get tail data and move tail pointer back one node
             T data = tail->data;
             tail = tail->previous;
             size--;
 
+            // If the list is empty, set the head to null; else, memory cleanup
             if (isEmpty()) {
                 head = NULL;
             } else {
                 tail->next = NULL;
             }
 
+            // Return node data
             return data;
         }
 
         // The remove() function removes a node from the linked list.
         T remove(Node<T>* node) {
+            // Check if the node to remove is the head or the tail
             if (node->previous == NULL) {
                 return removeFirst();
             } else if (node->next == NULL) {
@@ -161,10 +168,13 @@ class DoublyLinkedList {
             node->next->previous = node->previous;
             node->previous->next = node->next;
 
+            // Memory cleanup
             node->data = 0;
             node = node->previous = node->next = NULL;
+
             size--;
 
+            // Return node data
             return data;
         }
 
@@ -177,6 +187,7 @@ class DoublyLinkedList {
             int i;
             Node<T>* trav;
 
+            // Search from the head; else, search from the tail
             if (index < size / 2) {
                 trav = head;
 
@@ -191,7 +202,64 @@ class DoublyLinkedList {
                 }
             }
 
+            // Remove node
             return remove(trav);
+        }
+
+        // The removeByValue() function removes a node by its data value.
+        bool removeByValue(T elem) {
+            Node<T>* trav;
+
+            // Support searching for NULL; else, search for non-NULL value
+            if (elem == 0) {
+                for (trav = head; trav != NULL; trav = trav->next) {
+                    if (trav->data == 0) {
+                        remove(trav);
+
+                        return true;
+                    }
+                }
+            } else {
+                for (trav = head; trav != NULL; trav = trav->next) {
+                    if (elem == trav->data) {
+                        remove(trav);
+
+                        return true;
+                    }
+                }
+            }
+
+            // Value not found
+            return false;
+        }
+
+        // The indexOf() function returns the index of a given value.
+        int indexOf(T elem) {
+            int index = 0;
+            Node<T>* trav = head;
+
+            // Support searching for NULL; else, search for non-NULL value
+            if (elem == 0) {
+                for (; trav != NULL; trav = trav->next, index++) {
+                    if (trav->data == 0) {
+                        return index;
+                    }
+                }
+            } else {
+                for (; trav != NULL; trav = trav->next, index++) {
+                    if (elem == trav->data) {
+                        return index;
+                    }
+                }
+            }
+
+            // Value not found
+            return -1;
+        }
+
+        // The contains() function checks if a value is contained within the linked list.
+        bool contains(T elem) {
+            return indexOf(elem) != -1;
         }
 
         // The printList() function prints the entire linked list.

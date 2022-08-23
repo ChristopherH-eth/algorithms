@@ -53,10 +53,7 @@ class BinarySearchTree {
          */
         Node<T>* add(Node<T>* node, T elem) {
             if (node == NULL) {
-                node = new Node<T>;
-                node->data = elem;
-                node->left = NULL;
-                node->right = NULL;
+                node = new Node<T>(elem, NULL, NULL);
             } else {
                 if (elem < node->data) {
                     node->left = add(node->left, elem);
@@ -65,6 +62,7 @@ class BinarySearchTree {
                 }
             }
 
+            // Return added node
             return node;
         }
 
@@ -97,6 +95,7 @@ class BinarySearchTree {
                 node = node->left;
             }
 
+            // Return smallest node of subtree
             return node;
         }
 
@@ -106,6 +105,7 @@ class BinarySearchTree {
                 node = node->right;
             }
 
+            // Return largest node of subtree
             return node;
         }
 
@@ -115,11 +115,14 @@ class BinarySearchTree {
                 return NULL;
             }
 
+            // Dig left if node is smaller than the root, otherwise dig right.
             if (elem < node->data) {
                 node->left = remove(node->left, elem);
             } else if (elem > node->data) {
                 node->right = remove(node->right, elem);
             } else {
+                // Check for left, right, or no subtree. If node has two links, find the smallest
+                // value in the right subtree.
                 if (node->left == NULL) {
                     return node->right;
                 } else if (node->right == NULL) {
@@ -127,24 +130,26 @@ class BinarySearchTree {
                 } else {
                     Node<T>* tmp = findMin(node->right);
 
+                    // Swap nodes, then remove the tmp node we found to swap with.
                     node->data = tmp->data;
                     node->right = remove(node->right, tmp->data);
-
-                    delete tmp;
                 }
             }
 
+            // Return node removed
             return node;
         }
 
         // The height() function returns the height of the BST.
         int height(Node<T>* node) {
+            // If node is not NULL, compute left and right subtrees
             if (node == NULL) {
                 return 0;
             } else {
                 int lHeight = height(node->left);
                 int rHeight = height(node->right);
 
+                // Check height of each subtree and return largest
                 if (lHeight > rHeight) {
                     return (lHeight + 1);
                 } else {

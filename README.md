@@ -17,6 +17,12 @@ explanation at the beginning for Windows, Mac, and Linux.
 Each data structure comes with its own .cpp file which includes functional examples of the
 implementations found in the header files.
 
+## Table of Contents
+
+1. [Doubly Linked List](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/linked-list)
+2. [Binary Search Tree](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/binary-search-tree)
+3. [Stack](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/stack)
+
 ## License
 
 This repository is under the [MIT License](https://opensource.org/licenses/MIT).

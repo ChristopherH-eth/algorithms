@@ -12,6 +12,7 @@ std::vector<int> firstValues = {2, 6, 9, 11, 3};
 std::vector<int> lastValues = {3, 4, 12, 5, 7};
 int index = 4;
 int elem = 15;
+int value = 16;
 
 int main() {
     DoublyLinkedList<int> list;
@@ -73,6 +74,29 @@ int main() {
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Removing node at index " << index << std::endl;
     list.removeAt(index);
+    std::cout << "Head: " << list.peekFirst() << std::endl;
+    std::cout << "Tail: " << list.peekLast() << std::endl;
+    std::cout << "List size: " << list.listSize() << std::endl;
+    list.printList();
+    std::cout << "------------------------------------------------------" << std::endl;
+
+    // Check contains item by value
+    std::cout << "------------------------------------------------------" << std::endl;
+    std::cout << "Checking if list contains " << value << std::endl;
+    
+    if (list.contains(value)) {
+        std::cout << "True!" << std::endl;
+    } else {
+        std::cout << "False!" << std::endl;
+    }
+
+    list.printList();
+    std::cout << "------------------------------------------------------" << std::endl;
+
+    // Remove item by value
+    std::cout << "------------------------------------------------------" << std::endl;
+    std::cout << "Removing node of value " << value << std::endl;
+    list.removeByValue(value);
     std::cout << "Head: " << list.peekFirst() << std::endl;
     std::cout << "Tail: " << list.peekLast() << std::endl;
     std::cout << "List size: " << list.listSize() << std::endl;

@@ -12,9 +12,6 @@ template <typename T>
 class Stack {
 
     public:
-        // Stack Constructor
-        Stack() {}
-
         // The size of the stack
         virtual int size() {
             return 0;
