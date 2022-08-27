@@ -1,14 +1,18 @@
 #pragma once
 
+#include <iostream>
 #include <math.h>
 #include <functional>
+#include <utility>
+#include <list>
+#include <vector>
 #include "Item.h"
 
 /**
  * @file HashTableOpenAddressing.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *         C++ conversion by 0xChristopher
- * @brief 
+ * @brief HashTable implementation
  */
 
 class HashTable {
@@ -17,8 +21,14 @@ class HashTable {
         double loadFactor;
         int capacity, threshold;
         int modificationCount, usedBuckets, keyCount;
-        Item* item; // Used to store key-value pairs
+        std::vector<Item> items;
         std::hash<int> keyHash; // Used to hash keys in key-value pairs
+
+        // Hash table iterators
+        std::list<int> keyList;
+        std::list<int> valueList;
+        typedef std::list<int>::iterator keyIt;
+        typedef std::list<int>::iterator valueIt;
 
         // Starting size values of a hash table
         static int const DEFAULT_CAPACITY = 7;
@@ -45,6 +55,7 @@ class HashTable {
         // The ResizeTable() function doubles the size of the hash table once the capacity threshold
         // has been met.
         void ResizeTable() {
+            std::cout << "Table threshold reached, increasing capacity..." << std::endl;
             int oldCapacity = capacity;
 
             IncreaseCapacity();
@@ -52,39 +63,29 @@ class HashTable {
 
             threshold = (int) (capacity * loadFactor);
             keyCount = usedBuckets = 0;
-            Item** tmpItems = new Item*[oldCapacity];
 
-            // Copy the original array into a temporary array
+            // Copy the original vector into a temporary vector.
+            std::vector<Item> tmpItems(items);
+
+            // Empty the original vector and resize to new capacity.
             for (int i = 0; i < oldCapacity; i++) {
-                tmpItems[i] = items[i];
-                delete items[i];
+                items.pop_back();
             }
 
-            // Delete the original array
-            delete[] items;
-            // Update original array capacity
-            Item** items = new Item*[capacity];
-
-            // Initialize the new resized array
-            for (int i = 0; i < capacity; i++) {
-                items[i] = new Item;
-            }
+            items.resize(capacity);
+            std::cout << "Table resized, new capacity: " << capacity << std::endl;
 
             // Reinsert the original items into the resized array
             for (int i = 0; i < oldCapacity; i++) {
-                if (tmpItems[i]->key != 0 && tmpItems[i]->tombstone == false) {
-                    Insert(tmpItems[i]->key, tmpItems[i]->value);
-                    delete tmpItems[i];
+                if (tmpItems[i].key != 0 && tmpItems[i].tombstone == false) {
+                    Insert(tmpItems[i].key, tmpItems[i].value);
                 }
             }
-
-            // Cleanup the temporary array
-            delete[] tmpItems;
         }
 
         // The NoramlizeIndex() function converts a hash value to an index in the domain [0, capacity).
         int NormalizeIndex(int keyHash) {
-            return (keyHash & 0x7FFFFFFF) % capacity;
+            return (keyHash % capacity);
         }
 
         // The GCD() function finds the greatest common denominator of a and b
@@ -96,9 +97,6 @@ class HashTable {
             return GCD(b, a % b);
         }
 
-        //Item* items[DEFAULT_CAPACITY] = {};
-        Item** items = new Item*[DEFAULT_CAPACITY];
-
     public:
         // Hash table constructors
         HashTable() {
@@ -106,11 +104,7 @@ class HashTable {
             this->capacity = DEFAULT_CAPACITY;
             threshold = (int) (this->capacity * this->loadFactor);
             modificationCount = usedBuckets = keyCount = 0;
-
-            //Initialize blank array
-            for (int i = 0; i < DEFAULT_CAPACITY; i++) {
-                items[i] = new Item;
-            }
+            items.resize(DEFAULT_CAPACITY);
         }
 
         HashTable(int capacity) {
@@ -123,11 +117,7 @@ class HashTable {
             this->capacity = fmax(DEFAULT_CAPACITY, capacity);
             threshold = (int) (this->capacity * this->loadFactor);
             modificationCount = usedBuckets = keyCount = 0;
-
-            //Initialize blank array
-            for (int i = 0; i < DEFAULT_CAPACITY; i++) {
-                items[i] = new Item;
-            }
+            items.resize(DEFAULT_CAPACITY);
         }
 
         HashTable(int capacity, double loadFactor) {
@@ -142,20 +132,14 @@ class HashTable {
             this->capacity = fmax(DEFAULT_CAPACITY, capacity);
             threshold = (int) (this->capacity * this->loadFactor);
             modificationCount = usedBuckets = keyCount = 0;
-
-            //Initialize blank array
-            for (int i = 0; i < DEFAULT_CAPACITY; i++) {
-                items[i] = new Item;
-            }
+            items.resize(DEFAULT_CAPACITY);
         } 
 
         // The Clear() function clears all heap allocated data in the hash table.
         void Clear() {
             for (int i = 0; i < capacity; i++) {
-                delete items[i];
+                items.pop_back();
             }
-
-            delete[] items;
 
             keyCount = usedBuckets = 0;
             modificationCount++;
@@ -181,6 +165,53 @@ class HashTable {
             return keyCount == 0;
         }
 
+        // The KeyList() function returns an index ordered list of hash table keys.
+        std::list<int> KeyList() {
+            // Make sure the list is empty
+            if (!keyList.empty()) {
+                while (!keyList.empty()) {
+                    keyList.pop_back();
+                }
+            }
+
+            for (int i = 0; i < capacity; i++) {
+                if (items[i].key != 0 && items[i].tombstone == false) {
+                    keyList.push_back(items[i].key);
+                }
+            }
+
+            return keyList;
+        }
+
+        // The ValueList() function returns an index ordered list of hash table values.
+        std::list<int> ValueList() {
+            // Make sure the list is empty
+            if (!valueList.empty()) {
+                while (!valueList.empty()) {
+                    valueList.pop_back();
+                }
+            }
+
+            for (int i = 0; i < capacity; i++) {
+                if (items[i].key != 0 && items[i].tombstone == false) {
+                    valueList.push_back(items[i].value);
+                }
+            }
+
+            return valueList;
+        }
+
+        // The GetHashTableItems() function prints the hash table contents to the console by index.
+        void GetHashTableItems() {
+            std::list<int> keyList = KeyList();
+            std::list<int> valueList = ValueList();
+
+            for (std::pair<keyIt, valueIt> i(keyList.begin(), valueList.begin()); 
+                i.first != keyList.end() && i.second != valueList.end(); i.first++, i.second++) {
+                std::cout << "[" << *i.first << ", " << *i.second << "] ";
+            }
+        }
+
         // The Insert() function inserts a key-value pair into the hash table. If the key already exists,
         // the value is updated.
         void Insert(int key, int value) {
@@ -195,19 +226,18 @@ class HashTable {
 
             for (int i = offset, j = -1, x = 1; ; i = NormalizeIndex(offset + Probe(x++))) {
                 // Check if current index was previously deleted, contains a key, or is empty
-                if (items[i]->tombstone == true) {
+                if (items[i].tombstone == true) {
                     if (j == -1) {
                         j = i;
                     }
-                } else if (items[i]->key != 0) {
+                } else if (items[i].key != 0) {
                     // The key we're trying to insert already exists, so update the value.
-                    if (items[i]->key == key) {
-                        int oldValue = items[i]->value;
-
+                    if (items[i].key == key) {
                         if (j == -1) {
-                            items[i]->value = value;
+                            items[i].value = value;
+                            std::cout << "Key exists, updating value..." << std::endl;
                         } else {
-                            items[i] = item;
+                            items[j] = items[i];
                         }
 
                         modificationCount++;
@@ -219,16 +249,17 @@ class HashTable {
                     if (j == -1) {
                         usedBuckets++;
                         keyCount++;
-                        items[i]->key = key;
-                        items[i]->value = value;
+                        items[i].key = key;
+                        items[i].value = value;
+                        std::cout << "Inserted [" << key << ", " << value << "] at index " << i << std::endl;
                     } else {
                         keyCount++;
-                        items[j]->key = key;
-                        items[j]->value = value;
+                        items[j].key = key;
+                        items[j].value = value;
+                        std::cout << "Inserted [" << key << ", " << value << "] at index " << j << std::endl;
                     }
 
                     modificationCount++;
-
 
                     return;
                 }
@@ -250,22 +281,19 @@ class HashTable {
             for (int i = offset, j = -1, x = 1; ; i = NormalizeIndex(offset + Probe(x++))) {
                 // Ignore deleted cells, but record the first index in which one is encountered
                 // to perform lazy relocation later.
-                if (items[i]->tombstone == true) {
+                if (items[i].tombstone == true) {
                     if (j == -1) {
                         j = i;
                     }
-                } else if (items[i]->key != 0) {
+                } else if (items[i].key != 0) {
                     // Check if we found the key we're looking for
-                    if (items[i]->key == key) {
+                    if (items[i].key == key) {
                         // Perform optimization if we've encountered a previously deleted cell
                         if (j != -1) {
-                            items[j]->key = items[i]->key;
-                            items[j]->value = items[i]->value;
-                            items[j]->tombstone = items[i]->tombstone;
-
-                            // Memory cleanup
-                            delete items[i];
-                        }
+                            items[j].key = items[i].key;
+                            items[j].value = items[i].value;
+                            items[j].tombstone = items[i].tombstone;
+                        } 
 
                         return true;
                     }
