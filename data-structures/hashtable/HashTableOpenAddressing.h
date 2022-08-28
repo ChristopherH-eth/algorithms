@@ -12,7 +12,19 @@
  * @file HashTableOpenAddressing.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *         C++ conversion by 0xChristopher
- * @brief HashTable implementation
+ * @brief HashTable implementation which allows users to construct hash tables either with
+ *        default dimensions, or dimensions of their own. Once created, a user can insert new
+ *        items, remove items, check if certain keys exist, print the current key-value pairs
+ *        stored in the hash table, and return the value of a pair using its key. The hash
+ *        table automatically resizes once a certain threshold has been met, and will 
+ *        optimize itself while doing so. It also has built in optimizations when performing
+ *        insert, remove, and value check functions.
+ * 
+ *        Open Addressing is used to resolve hash collisions, and this table currently uses
+ *        a linear probing method (found in LinearProbing.h of this repository).
+ * 
+ *        Best case time complexity: O(1)
+ *        Worst case time complexity: O(n)
  */
 
 class HashTable {
@@ -214,8 +226,8 @@ class HashTable {
 
         // The Insert() function inserts a key-value pair into the hash table. If the key already exists,
         // the value is updated.
-        void Insert(int key, int value) {
-            if (key == 0) {
+        Item Insert(int key, int value) {
+            if (key == 0 || !key) {
                 throw "Empty key";
             } else if (usedBuckets >= threshold) {
                 ResizeTable();
@@ -236,13 +248,18 @@ class HashTable {
                         if (j == -1) {
                             items[i].value = value;
                             std::cout << "Key exists, updating value..." << std::endl;
+                            modificationCount++;
+
+                            return items[i];
                         } else {
                             items[j] = items[i];
+                            items[i].key = 0;
+                            items[i].value = 0;
+                            items[i].tombstone = true;
+                            modificationCount++;
+
+                            return items[j];
                         }
-
-                        modificationCount++;
-
-                        return;
                     }
                 } else {
                     // Current slot is empty so a new key-value pair can be inserted.
@@ -252,23 +269,26 @@ class HashTable {
                         items[i].key = key;
                         items[i].value = value;
                         std::cout << "Inserted [" << key << ", " << value << "] at index " << i << std::endl;
+                        modificationCount++;
+
+                        return items[i];
                     } else {
                         keyCount++;
                         items[j].key = key;
                         items[j].value = value;
                         std::cout << "Inserted [" << key << ", " << value << "] at index " << j << std::endl;
+                        modificationCount++;
+
+                        return items[j];
                     }
-
-                    modificationCount++;
-
-                    return;
                 }
             }
         }
 
-        // The HasKey() function returns true if the key is contained within the hash table.
+        // The HasKey() function returns true if the key is contained within the hash table. The hash
+        // table is optimized along the way if needed.
         bool HasKey(int key) {
-            if (key == 0) {
+            if (key == 0 || !key) {
                 throw "Empty key";
             }
 
@@ -290,9 +310,10 @@ class HashTable {
                     if (items[i].key == key) {
                         // Perform optimization if we've encountered a previously deleted cell
                         if (j != -1) {
-                            items[j].key = items[i].key;
-                            items[j].value = items[i].value;
-                            items[j].tombstone = items[i].tombstone;
+                            items[j] = items[i];
+                            items[i].key = 0;
+                            items[i].value = 0;
+                            items[i].tombstone = true;
                         } 
 
                         return true;
@@ -304,5 +325,83 @@ class HashTable {
             }
         }
 
+        // The GetValue() function returns a value for a given key, if such a key exists in the hash
+        // table. The hash table is optimized along the way if needed.
+        int GetValue(int key) {
+            if (key == 0 || !key) {
+                throw "Empty key";
+            }
+
+            SetupProbing(key || !key);
+            // Hash the current key to be inserted and normalize to get the index
+            int offset = NormalizeIndex(keyHash(key));
+
+            // Start at the original hash value and probe until we find our key or an empty item,
+            // in which case our item does not exist.
+            for (int i = offset, j = -1, x = 1; ; i = NormalizeIndex(offset + Probe(x++))) {
+                // Ignore deleted cells, but record the first index in which one is encountered
+                // to perform lazy relocation later.
+                if (items[i].tombstone == true) {
+                    if (j == -1) {
+                        j = i;
+                    }
+                } else if (items[i].key != 0) {
+                    // Check if we found the key we're looking for
+                    if (items[i].key == key) {
+                        // Perform optimization if we've encountered a previously deleted cell
+                        if (j != -1) {
+                            items[j] = items[i];
+                            items[i].key = 0;
+                            items[i].value = 0;
+                            items[i].tombstone = true;
+
+                            return items[j].value;
+                        } else {
+                            return items[i].value;
+                        }
+                    }
+                } else {
+                    // Key was not found
+                    return 0;
+                }
+            }
+        }
+
+        // The Remove() function removes a key-value pair from the hash table, adds a tombstone in its
+        // place, and returns the value of the pair removed.
+        int Remove(int key) {
+            if (key == 0 || !key) {
+                throw "Empty key";
+            }
+
+            SetupProbing(key || !key);
+            // Hash the current key to be inserted and normalize to get the index
+            int offset = NormalizeIndex(keyHash(key));
+
+            // Start at the original hash value and probe until we find our key or an empty item,
+            // in which case our item does not exist.
+            for (int i = offset, j = -1, x = 1; ; i = NormalizeIndex(offset + Probe(x++))) {
+                // Ignore deleted cells.
+                if (items[i].tombstone == true) {
+                    continue;
+                } else if (items[i].key != 0) {
+                    // Check if we found the key we're looking for
+                    if (items[i].key == key) {
+                        keyCount--;
+                        modificationCount++;
+                        int oldValue = items[i].value;
+
+                        items[i].key = 0;
+                        items[i].value = 0;
+                        items[i].tombstone = true;
+
+                        return oldValue;
+                    }
+                } else {
+                    // Key was not found
+                    return 0;
+                }
+            }
+        }
 
 };

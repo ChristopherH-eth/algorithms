@@ -9,10 +9,12 @@
  */
 
 int keys[] = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21};
+char _keys[] = {'A', 'B', 'C', 'd', 'e', 'f', 'g', 'h', 'Z', 'U', 't'};
 int values[] = {123, 234, 345, 456, 567, 678, 789, 890, 111, 222, 333};
+int rem = 11;
 
 int main() {
-    HashTable hashTable;
+    LinearProbing hashTable;
 
     // Check that the hash table has been initialized
     std::cout << "------------------------------------------------------" << std::endl;
@@ -52,11 +54,38 @@ int main() {
     std::cout << "\nHash table size: " << hashTable.Size() << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
+    // Remove a key-value pair from the hash table
+    std::cout << "------------------------------------------------------" << std::endl;
+    std::cout << "Removing key " << rem << " from the hash table..." << std::endl;
+    int removed = hashTable.Remove(rem);
+
+    if (removed) {
+        std::cout << "Value of " << rem << " is " << removed << ", and was removed" << std::endl;
+    } else {
+        std::cout << "Key not found" << std::endl;
+    }
+
+    std::cout << "------------------------------------------------------" << std::endl;
+
+    // Get the corresponding value of a key
+    std::cout << "------------------------------------------------------" << std::endl;
+    std::cout << "Getting the value of key " << keys[10] << "..." << std::endl;
+    int val = hashTable.GetValue(keys[10]);
+    std::cout << "The value of " << keys[10] << " is: " << val << std::endl;
+    std::cout << "------------------------------------------------------" << std::endl;
+
+    // Print all items currently in the hash table
+    std::cout << "------------------------------------------------------" << std::endl;
+    std::cout << "Printing hash table key-value pairs..." << std::endl;
+    hashTable.GetHashTableItems();
+    std::cout << "\nHash table size: " << hashTable.Size() << std::endl;
+    std::cout << "------------------------------------------------------" << std::endl;
+
     // Clear all values in the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Clearing table..." << std::endl;
     hashTable.Clear();
-    std::cout << "Table cleared. Ending program..." << std::endl;
+    std::cout << "Table cleared. Ending program...\nPress 'Enter' to continue..." << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
     std::cin.get();

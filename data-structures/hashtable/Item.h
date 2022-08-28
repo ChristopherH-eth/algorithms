@@ -4,7 +4,8 @@
  * @file Item.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *         C++ conversion by 0xChristopher
- * @brief The Item struct provides a framework for item creation in the HashTable class.
+ * @brief The Item struct provides a framework for item creation in the HashTable class
+ *        (HashTableOpenAddressing.h).
  */
 
 struct Item {
@@ -14,6 +15,7 @@ struct Item {
         int value = 0;
         bool tombstone = false; // Tombstone is used to mark deleted key-value pairs
  
+        // Item Constructors
         Item() {}
 
         Item(int key, int value, bool tombstone) {
