@@ -9,6 +9,13 @@
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *         C++ conversion by 0xChristopher
  * @brief The BinarySearchTree (BST) class utilizes the Node struct to add values to the BST.
+ *        This implementation allows a user to insert new nodes, find the minimum and maximum
+ *        values, remove nodes from the tree, and print nodes in pre-order, in-order, and 
+ *        post-order. It also allows for a level-order search, and can return the height of the
+ *        BST.
+ * 
+ *        Average Time Complexity (Search, Insert, Delete):     O(log n)
+ *        Worst Case Time Complexity (Search, Insert, Delete):  O(n)
  */
 
 template <typename T>
@@ -20,136 +27,162 @@ class BinarySearchTree {
         Node<T>* root = NULL;
 
     public:
-        // BinarySearchTree Constructor
+        /// @see BinarySearchTree Constructor
         BinarySearchTree() {}
 
-        // The size() function returns the size of the BinarySearchTree.
-        int size() {
+        /// @see The Size() function returns the size of the BinarySearchTree.
+        /// @return The number of nodes in the BST
+        int Size() {
             return nodeCount;
         }
 
-        // The isEmpty() function returns true if the BST is empty.
-        bool isEmpty() {
+        /// @see The IsEmpty() function returns true if the BST is empty.
+        /// @return True if the BST is empty
+        bool IsEmpty() {
             return nodeCount == 0;
         }
 
         /**
-        * The add(T elem) function attempts to add an element to the BST and returns true if it
-        * is successful.
-        */
-        bool add(T elem) {
-            if (contains(elem)) {
+         * @see The Add(T elem) function attempts to add an element to the BST and returns true if it
+         * is successful.
+         * @param elem The value of the node to be added to the BST
+         */
+        bool Add(T elem) {
+            if (Contains(elem)) {
                 return false;
             } else {
-                root = add(root, elem);
+                root = Add(root, elem);
                 nodeCount++;
                 return true;
             }
         }
 
         /**
-         * The add(Node<T>* node, T elem) function adds a new node the the BST based on the size
+         * @see The Add(Node<T>* node, T elem) function adds a new node the the BST based on the size
          * of the element to be added.
+         * @param node The node to be added to the BST
+         * @param elem The value of the node being added
+         * @return Returns the successfully added node
          */
-        Node<T>* add(Node<T>* node, T elem) {
+        Node<T>* Add(Node<T>* node, T elem) {
             if (node == NULL) {
                 node = new Node<T>(elem, NULL, NULL);
             } else {
                 if (elem < node->data) {
-                    node->left = add(node->left, elem);
+                    node->left = Add(node->left, elem);
                 } else {
-                    node->right = add(node->right, elem);
+                    node->right = Add(node->right, elem);
                 }
             }
 
-            // Return added node
             return node;
         }
 
-        // The contains(T elem) function returns true if the root node has a value.
-        bool contains(T elem) {
-            return contains(root, elem);
+        /**
+         * @see The Contains(T elem) function returns true if the root node has a value.
+         * @param elem The node value being searched for
+         * @return Returns true or false based on the overloaded function
+         */
+        bool Contains(T elem) {
+            return Contains(root, elem);
         }
 
-        /** 
-        * The contains(Node<T>* node, T elem) function checks the left then right children of the
-        * current node for value insertion.
-        */
-        bool contains(Node<T>* node, T elem) {
+        /**
+         * @see The Contains(Node<T>* node, T elem) function checks the left then right children of the
+         * current node for value insertion.
+         * @param node The root node of the BST or sub-tree passed in from the function overload
+         * @param elem The node value being searched for
+         * @return Returns true of the node/value exists
+         */
+        bool Contains(Node<T>* node, T elem) {
             if (node == NULL) {
                 return false;
             }
 
             if (elem < node->data) {
-                return contains(node->left, elem);
+                return Contains(node->left, elem);
             } else if (elem > node->data) {
-                return contains(node->right, elem);
+                return Contains(node->right, elem);
             } else {
                 return true;
             }
         }
 
-        // The findMin() function finds and returns the minimum value in the BST.
-        Node<T>* findMin(Node<T>* node) {
+        /**
+         * @see The FindMin() function finds and returns the minimum value in the BST.
+         * @param node The root node of the BST or subtree to begin searching from
+         * @return Returns the node with the smallest value in the BST or subtree
+         */
+        Node<T>* FindMin(Node<T>* node) {
             while (node->left != NULL) {
                 node = node->left;
             }
 
-            // Return smallest node of subtree
             return node;
         }
 
-        // The findMax() function finds and returns the maximum value in the BST.
-        Node<T>* findMax(Node<T>* node) {
+        /**
+         * @see The FindMax() function finds and returns the maximum value in the BST.
+         * @param node The root node of the BST or subtree to being searching from
+         * @return Returns the node with the largest value in the BST or subtree
+         */
+        Node<T>* FindMax(Node<T>* node) {
             while (node->right != NULL) {
                 node = node->right;
             }
 
-            // Return largest node of subtree
             return node;
         }
 
-        // The remove() function removes a node from the BST.
-        Node<T>* remove(Node<T>* node, T elem) {
+        /**
+         * @see The Remove() function removes a node from the BST.
+         * @param node The root node of the BST or subtree to being searching from
+         * @param elem The value of the node to be removed
+         * @return Returns the node removed
+         */
+        Node<T>* Remove(Node<T>* node, T elem) {
             if (node == NULL) {
                 return NULL;
             }
 
-            // Dig left if node is smaller than the root, otherwise dig right.
+            /// Dig left if node is smaller than the root, otherwise dig right.
             if (elem < node->data) {
-                node->left = remove(node->left, elem);
+                node->left = Remove(node->left, elem);
             } else if (elem > node->data) {
-                node->right = remove(node->right, elem);
+                node->right = Remove(node->right, elem);
             } else {
-                // Check for left, right, or no subtree. If node has two links, find the smallest
-                // value in the right subtree.
+                /// Check for left, right, or no subtree. If node has two links, find the smallest
+                /// value in the right subtree.
                 if (node->left == NULL) {
                     return node->right;
                 } else if (node->right == NULL) {
                     return node->left;
                 } else {
-                    Node<T>* tmp = findMin(node->right);
+                    Node<T>* tmp = FindMin(node->right);
 
-                    // Swap nodes, then remove the tmp node we found to swap with.
+                    /// Swap nodes, then remove the tmp node we found to swap with.
                     node->data = tmp->data;
-                    node->right = remove(node->right, tmp->data);
+                    node->right = Remove(node->right, tmp->data);
                 }
             }
 
-            // Return node removed
             return node;
         }
 
-        // The height() function returns the height of the BST.
-        int height(Node<T>* node) {
-            // If node is not NULL, compute left and right subtrees
+        /**
+         * @see The Height() function returns the height of the BST.
+         * @param node The root node of the BST
+         * @return Returns the height of the left or right subtree, whichever is greater
+         */
+        int Height(Node<T>* node) {
+            /// If node is not NULL, compute left and right subtrees
             if (node == NULL) {
                 return 0;
             } else {
-                int lHeight = height(node->left);
-                int rHeight = height(node->right);
+                int lHeight = Height(node->left);
+                int rHeight = Height(node->right);
 
-                // Check height of each subtree and return largest
+                /// Check height of each subtree and return largest
                 if (lHeight > rHeight) {
                     return (lHeight + 1);
                 } else {
@@ -158,41 +191,45 @@ class BinarySearchTree {
             }
         }
 
-        // The preOrder() function prints all of the node values in the BST via pre-order traversal.
-        void preOrder(Node<T>* node) {
+        /// @see The PreOrder() function prints all of the node values in the BST via pre-order traversal.
+        /// @param node The root node of the BST
+        void PreOrder(Node<T>* node) {
             if (node == NULL) {
                 return;
             }
 
             std::cout << node->data << " ";
-            preOrder(node->left);
-            preOrder(node->right);
+            PreOrder(node->left);
+            PreOrder(node->right);
         }
 
-        // The inOrder() function prints all of the node values in the BST in ascending order.
-        void inOrder(Node<T>* node) {
+        /// @see The InOrder() function prints all of the node values in the BST in ascending order.
+        /// @param node The root node of the BST
+        void InOrder(Node<T>* node) {
             if (node == NULL) {
                 return;
             }
 
-            inOrder(node->left);
+            InOrder(node->left);
             std::cout << node->data << " ";
-            inOrder(node->right);
+            InOrder(node->right);
         }
 
-        // The postOrder() function prints all of the node values in the BST via post-order traversal.
-        void postOrder(Node<T>* node) {
+        /// @see The PostOrder() function prints all of the node values in the BST via post-order traversal.
+        /// @param node The root node of the BST
+        void PostOrder(Node<T>* node) {
             if (node == NULL) {
                 return;
             }
 
-            postOrder(node->left);
-            postOrder(node->right);
+            PostOrder(node->left);
+            PostOrder(node->right);
             std::cout << node->data << " ";
         }
 
-        // The levelOrder() function performs a breadth-first-search using a queue.
-        void levelOrder(Node<T>* node) {
+        /// @see The LevelOrder() function performs a breadth-first-search using a queue.
+        /// @param node The root node of the BST
+        void LevelOrder(Node<T>* node) {
             if (node == NULL) {
                 return;
             }
@@ -214,45 +251,43 @@ class BinarySearchTree {
                 }
             }
         }
-
-        /** 
-         * The display() function displays the values of all nodes in the BST in pre-order, in-order, post-order,
-         * and level-order. It then provides the total count of all the nodes in the BST.
-         */
-        void display() {
+ 
+        /// @see The Display() function displays the values of all nodes in the BST in pre-order, in-order, post-order,
+        /// and level-order. It then provides the total count of all the nodes in the BST.
+        void Display() {
             std::cout << "\nPrinting Binary Search Tree values..." << std::endl;
             std::cout << "Node values in pre-order: " << std::endl;
-            preOrder(root);
+            PreOrder(root);
             std::cout << "\nNode values in order: " << std::endl;
-            inOrder(root);
+            InOrder(root);
             std::cout << "\nNode values in post-order: " << std::endl;
-            postOrder(root);
+            PostOrder(root);
             std::cout << "\nNode values via level order traversal (breadth first search): " << std::endl;
-            levelOrder(root);
+            LevelOrder(root);
             std::cout << "\nTotal of " << nodeCount << " nodes in tree." << std::endl;
         }
 
-        // The min() function allows the main function to call findMin().
-        void min() {
+        /// @see The Min() function allows the main function to call FindMin().
+        void Min() {
             std::cout << "\nFinding the minimum value..." << std::endl;
-            std::cout << "Minimum value: " << findMin(root)->data << std::endl;
+            std::cout << "Minimum value: " << FindMin(root)->data << std::endl;
         }
 
-        // The max() function allows the main function to call findMax().
-        void max() {
+        /// @see The Max() function allows the main function to call FindMax().
+        void Max() {
             std::cout << "\nFinding the maximum value..." << std::endl;
-            std::cout << "Maximum value: " << findMax(root)->data << std::endl;
+            std::cout << "Maximum value: " << FindMax(root)->data << std::endl;
         }
 
-        // The getHeight() function allows the main function to call height().
-        void getHeight() {
-            std::cout << "\nThe height of the Binary Search Tree is: " << height(root) << std::endl;
+        /// @see The GetHeight() function allows the main function to call Height().
+        void GetHeight() {
+            std::cout << "\nThe height of the Binary Search Tree is: " << Height(root) << std::endl;
         }
 
-        // The rem() function allows the main function to call remove().
-        void rem(T elem) {
+        /// @see The Rem() function allows the main function to call remove().
+        void Rem(T elem) {
             std::cout << "\nRemoving node that contains: " << elem << std::endl;
-            remove(root, elem);
+            Remove(root, elem);
             nodeCount--;
             std::cout << "Node removed." << std::endl;
         }

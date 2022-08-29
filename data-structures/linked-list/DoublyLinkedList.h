@@ -8,6 +8,16 @@
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *         C++ conversion by 0xChristopher
  * @brief The DoublyLinkedList class utilizes the Node struct to add and remove values from the list.
+ *        This implementation allows the user to add nodes to the head and tail of the list, as well as
+ *        at any particular index. Nodes can also be removed at the head or tail, as well as via the node
+ *        itself, its value, or at any index. And index for an existing value can be returned as well.
+ * 
+ *        Time Complexity:
+ *              Operation                   Average     Worst
+ *              Insert at head or tail      O(1)        O(1)
+ *              Remove at head or tail      O(1)        O(1)
+ *              Search                      O(n)        O(n)
+ *              Access                      O(n)        O(n)
  */
 
 template <typename T>
@@ -21,25 +31,28 @@ class DoublyLinkedList {
         Node<T>* newNode;
 
     public:
-        // DoublyLinkedList Constructor
+        /// @see DoublyLinkedList Constructor
         DoublyLinkedList() {}
 
-        // The size() function returns the size of the linked list.
-        int listSize() {
+        /// @see The ListSize() function returns the size of the linked list.
+        /// @return Returns the size of the list
+        int ListSize() {
             return size;
         }
 
-        // The isEmpty() function returns true if the list is empty.
-        bool isEmpty() {
+        /// @see The IsEmpty() function returns true if the list is empty.
+        /// @return Returns true if the list is empty
+        bool IsEmpty() {
             return size == 0;
         }
 
         /**
-         * The addLast() function adds a the first node if the list is empty, or adds a node to the 
+         * @see The AddLast() function adds a the first node if the list is empty, or adds a node to the 
          * end of the list.
+         * @param elem The value of the node to be added to the list
          */
-        void addLast(T elem) {
-            if (isEmpty()) {
+        void AddLast(T elem) {
+            if (IsEmpty()) {
                 head = new Node<T>(elem, NULL, NULL);
                 tail = head;
             } else {
@@ -52,11 +65,12 @@ class DoublyLinkedList {
         }
 
         /**
-         * The addFirst() function adds a the first node if the list is empty, or adds a node to the 
+         * @see The addFirst() function adds a the first node if the list is empty, or adds a node to the 
          * beginning of the list.
+         * @param elem The value of the node to be added to the list
          */
-        void addFirst(T elem) {
-            if (isEmpty()) {
+        void AddFirst(T elem) {
+            if (IsEmpty()) {
                 head = new Node<T>(elem, NULL, NULL);
                 tail = head;
             } else {
@@ -68,15 +82,19 @@ class DoublyLinkedList {
             size++;
         }
 
-        // The addAt() function adds a new node to the list at a particular index.
-        void addAt(int index, T elem) {
+        /**
+         * @see The AddAt() function adds a new node to the list at a particular index.
+         * @param index The index where the node is to be added
+         * @param elem The value of the node to be added to the list
+         */
+        void AddAt(int index, T elem) {
             if (index < 0 || index > size) {
                 throw "Index out of bounds";
             } else if (index == 0) {
-                addFirst(elem);
+                AddFirst(elem);
                 return;
             } else if (index == size) {
-                addLast(elem);
+                AddLast(elem);
                 return;
             } else {
                 Node<T>* tmp = head;
@@ -93,93 +111,102 @@ class DoublyLinkedList {
             }
         }
 
-        // The peekFirst() function returns the first node in the list.
-        T peekFirst() {
-            if (isEmpty()) {
+        /// @see The PeekFirst() function returns the first node in the list.
+        /// @return Returns the value of the head node
+        T PeekFirst() {
+            if (IsEmpty()) {
                 throw "List is empty.";
             }
 
             return head->data;
         }
 
-        // The peekLast() function returns the last node in the list.
-        T peekLast() {
-            if (isEmpty()) {
+        /// @see The PeekLast() function returns the last node in the list.
+        /// @return Returns the value of the tail node
+        T PeekLast() {
+            if (IsEmpty()) {
                 throw "List is empty.";
             }
 
             return tail->data;
         }
 
-        // The removeFirst() function removes the node at the head of the linked list.
-        T removeFirst() {
-            if (isEmpty()) {
+        /// @see The RemoveFirst() function removes the node at the head of the linked list.
+        /// @return Returns the value of the removed head node
+        T RemoveFirst() {
+            if (IsEmpty()) {
                 throw "List is empty";
             }
 
-            // Get head data and move head pointer forward one node
+            /// Get head data and move head pointer forward one node
             T data = head->data;
             head = head->next;
             size--;
 
-            // If the list is empty, set the tail to null; else, memory cleanup
-            if (isEmpty()) {
+            /// If the list is empty, set the tail to null; else, memory cleanup
+            if (IsEmpty()) {
                 tail = NULL;
             } else {
                 head->previous = NULL;
             }
 
-            // Return node data
             return data;
         }
 
-        // The removeLast() function removes the node at the tail of the linked list.
-        T removeLast() {
-            if (isEmpty()) {
+        /// @see The RemoveLast() function removes the node at the tail of the linked list.
+        /// @return Returns the value of the removed tail node
+        T RemoveLast() {
+            if (IsEmpty()) {
                 throw "List is empty";
             }
 
-            // Get tail data and move tail pointer back one node
+            /// Get tail data and move tail pointer back one node
             T data = tail->data;
             tail = tail->previous;
             size--;
 
-            // If the list is empty, set the head to null; else, memory cleanup
-            if (isEmpty()) {
+            /// If the list is empty, set the head to null; else, memory cleanup
+            if (IsEmpty()) {
                 head = NULL;
             } else {
                 tail->next = NULL;
             }
 
-            // Return node data
             return data;
         }
 
-        // The remove() function removes a node from the linked list.
-        T remove(Node<T>* node) {
-            // Check if the node to remove is the head or the tail
+        /**
+         * @see The Remove() function removes a node from the linked list.
+         * @param node The specific node to be removed
+         * @return Returns the value of the removed node
+         */
+        T Remove(Node<T>* node) {
+            /// Check if the node to remove is the head or the tail
             if (node->previous == NULL) {
-                return removeFirst();
+                return RemoveFirst();
             } else if (node->next == NULL) {
-                return removeLast();
+                return RemoveLast();
             }
 
             T data = node->data;
             node->next->previous = node->previous;
             node->previous->next = node->next;
 
-            // Memory cleanup
+            /// Memory cleanup
             node->data = 0;
             node = node->previous = node->next = NULL;
 
             size--;
 
-            // Return node data
             return data;
         }
 
-        // The removeAt() function removes a node at a particular index.
-        T removeAt(int index) {
+        /**
+         * @see The RemoveAt() function removes a node at a particular index.
+         * @param index The index of the node to be removed
+         * @return Returns the value of the node removed by the Remove() function
+         */
+        T RemoveAt(int index) {
             if (index < 0 || index >= size) {
                 throw "Index out of bounds";
             }
@@ -187,7 +214,7 @@ class DoublyLinkedList {
             int i;
             Node<T>* trav;
 
-            // Search from the head; else, search from the tail
+            /// Search from the head; else, search from the tail
             if (index < size / 2) {
                 trav = head;
 
@@ -202,19 +229,22 @@ class DoublyLinkedList {
                 }
             }
 
-            // Remove node
-            return remove(trav);
+            return Remove(trav);
         }
 
-        // The removeByValue() function removes a node by its data value.
-        bool removeByValue(T elem) {
+        /**
+         * @see The RemoveByValue() function removes a node by its data value.
+         * @param elem The value of the node to be removed from the list
+         * @return Returns true if the node is removed
+         */
+        bool RemoveByValue(T elem) {
             Node<T>* trav;
 
-            // Support searching for NULL; else, search for non-NULL value
+            /// Support searching for NULL; else, search for non-NULL value
             if (elem == 0) {
                 for (trav = head; trav != NULL; trav = trav->next) {
                     if (trav->data == 0) {
-                        remove(trav);
+                        Remove(trav);
 
                         return true;
                     }
@@ -222,23 +252,26 @@ class DoublyLinkedList {
             } else {
                 for (trav = head; trav != NULL; trav = trav->next) {
                     if (elem == trav->data) {
-                        remove(trav);
+                        Remove(trav);
 
                         return true;
                     }
                 }
             }
 
-            // Value not found
             return false;
         }
 
-        // The indexOf() function returns the index of a given value.
-        int indexOf(T elem) {
+        /**
+         * @see The IndexOf() function returns the index of a given value.
+         * @param elem The value of the node to be searched for
+         * @return Returns the index of the node if it exists
+         */
+        int IndexOf(T elem) {
             int index = 0;
             Node<T>* trav = head;
 
-            // Support searching for NULL; else, search for non-NULL value
+            /// Support searching for NULL; else, search for non-NULL value
             if (elem == 0) {
                 for (; trav != NULL; trav = trav->next, index++) {
                     if (trav->data == 0) {
@@ -253,17 +286,20 @@ class DoublyLinkedList {
                 }
             }
 
-            // Value not found
             return -1;
         }
 
-        // The contains() function checks if a value is contained within the linked list.
-        bool contains(T elem) {
-            return indexOf(elem) != -1;
+        /**
+         * @see The Contains() function checks if a value is contained within the linked list.
+         * @param elem The value of the node to be searched for
+         * @return Returns true if the node exists
+         */
+        bool Contains(T elem) {
+            return IndexOf(elem) != -1;
         }
 
-        // The printList() function prints the entire linked list.
-        void printList() {
+        /// @see The PrintList() function prints the entire linked list.
+        void PrintList() {
             std::cout << "Current list: ";
 
             Node<T>* trav = head;

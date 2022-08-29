@@ -9,7 +9,8 @@
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *         C++ conversion by 0xChristopher
  * @brief The IntStack class inherits the Stack class and elaborates on the design to create a workable stack
- * for integers.
+ *        for integers. It allows the user to add and remove elements, check the value at the top of the 
+ *        stack, clear the stack and increase capacity.
  */
 
 using namespace std;
@@ -20,26 +21,29 @@ class IntStack : public Stack<T> {
 
     private:
         vector<int> stackVector;
-        int position {0}; // Tracks the top of the stack
-        int capacity {0}; // Capacity of the stack
-        int elem {0}; // Element at given position
+        int position {0}; /// Tracks the top of the stack
+        int capacity {0}; /// Capacity of the stack
+        int elem {0}; /// Element at given position
 
     public:
-        // IntStack Constructor
+        /// @see IntStack Constructor
         IntStack() {}
 
-        // The size() function returns the size of the stack.
-        int size() override {
+        /// @see The size() function returns the size of the stack.
+        /// @return Returns the number of elements on the stack
+        int Size() override {
             return position;
         }
 
-        // The isEmpty() function returns true if the stack is empty.
-        bool isEmpty() override {
+        /// @see The isEmpty() function returns true if the stack is empty.
+        /// @return Returns true if the stack is empty
+        bool IsEmpty() override {
             return position == 0;
         }
 
-        // The peek() function returns the element at the top of the stack.
-        T peek() override {
+        /// @see The peek() function returns the element at the top of the stack.
+        /// @return Returns the element at the top of the stack
+        T Peek() override {
             if (position == 0) {
                 throw "The stack is empty!";
             }
@@ -47,18 +51,20 @@ class IntStack : public Stack<T> {
             return stackVector.back();
         }
 
-        // The push() functions adds an element (value) to the top of the stack if maxSize hasn't been reached.
-        void push(T value) override {
+        /// @see The push() functions adds an element (value) to the top of the stack if maxSize hasn't been reached.
+        /// @param value The element to be pushed onto the stack
+        void Push(T value) override {
             if (position == capacity) {
-                increaseCapacity();
+                IncreaseCapacity();
             }
 
             stackVector.at(position) = value;
             position++;
         }
 
-        // The pop() function removes the element from the top of the stack.
-        T pop() override {
+        /// @see The pop() function removes the element from the top of the stack.
+        /// @return Returns the element popped off the stack
+        T Pop() override {
             if (position == 0) {
                 throw "The stack is empty!";
             } else if (stackVector.size() > position) {
@@ -71,12 +77,12 @@ class IntStack : public Stack<T> {
             position--;
             capacity--;
 
-            return (elem);
+            return elem;
         }
 
-        // The increaseCapacity() function increases the capacity of the stack if max capacity
-        // is reached.
-        void increaseCapacity() override {
+        /// @see The increaseCapacity() function increases the capacity of the stack if max capacity
+        /// is reached.
+        void IncreaseCapacity() override {
             cout << "Maximum capacity reached; increasing stack capacity..." << endl;
 
             if (position == 0) {
@@ -88,8 +94,8 @@ class IntStack : public Stack<T> {
             }
         }
 
-        // The clearStack() function clears all elements in the stack.
-        void clearStack() override {
+        /// @see The clearStack() function clears all elements in the stack.
+        void ClearStack() override {
             stackVector.clear();
             position = 0;
             capacity = 0;
@@ -97,15 +103,15 @@ class IntStack : public Stack<T> {
 
         /* Test Functions */
 
-        int vectorSize() {
+        int VectorSize() {
             return stackVector.size();
         }
 
-        int getPosition() {
+        int GetPosition() {
             return position;
         }
 
-        int getCapacity() {
+        int GetCapacity() {
             return capacity;
         }
     

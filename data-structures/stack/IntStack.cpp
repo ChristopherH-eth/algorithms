@@ -3,7 +3,8 @@
 
 /**
  * @file IntStack.cpp
- * @author 0xChristopher
+ * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
+ *         C++ conversion by 0xChristopher
  * @brief Basic utilization of a custom stack class; in this case, used with integers.
  */
 
@@ -14,56 +15,55 @@ int elem {0};
 int main() {
     IntStack<int> stack;
 
-    cout << "Checking Vector size: " << stack.vectorSize() << endl;
+    cout << "Checking Vector size: " << stack.VectorSize() << endl;
 
-    // Add elements to the stack.
-    while (stack.size() < 5) {
+    /// @see Add elements to the stack.
+    while (stack.Size() < 5) {
         cout << "Pushing " << elem << " onto the stack..." << endl;
-        stack.push(elem);
+        stack.Push(elem);
         elem++;
     }
 
-    // Return the size of the stack and check if it's empty.
-    cout << "The size of the stack is: " << stack.size() << endl;
-    cout << "Checking if stack is empty: " << stack.isEmpty() << endl;
-    cout << "Checking Vector size: " << stack.vectorSize() << endl;
+    /// @see Return the size of the stack and check if it's empty.
+    cout << "The size of the stack is: " << stack.Size() << endl;
+    cout << "Checking if stack is empty: " << stack.IsEmpty() << endl;
+    cout << "Checking Vector size: " << stack.VectorSize() << endl;
 
-    // Pop all elements off the stack
-    while (!stack.isEmpty()) {
-        cout << "Popping an element (" << stack.pop() << ") off the stack..." << endl;
+    /// @see Pop all elements off the stack
+    while (!stack.IsEmpty()) {
+        cout << "Popping an element (" << stack.Pop() << ") off the stack..." << endl;
     }
 
-    // Return the size of the stack and check if it's empty.
-    cout << "The size of the stack is: " << stack.size() << endl;
-    cout << "Checking if stack is empty: " << stack.isEmpty() << endl;
-    cout << "Checking Vector size: " << stack.vectorSize() << endl;
+    /// @see Return the size of the stack and check if it's empty.
+    cout << "The size of the stack is: " << stack.Size() << endl;
+    cout << "Checking if stack is empty: " << stack.IsEmpty() << endl;
+    cout << "Checking Vector size: " << stack.VectorSize() << endl;
 
-    // Try to pop and element off an empty stack.
+    /// @see Try to pop and element off an empty stack.
     try {
-        cout << "Trying to pop an element that doesn't exist..." << stack.pop() << endl;
+        cout << "Trying to pop an element that doesn't exist..." << stack.Pop() << endl;
     } catch (const char* msg) {
         cerr << msg << endl;
     }
 
-    // Check position and capacity.
-    cout << "Current Position in Stack: " << stack.getPosition() <<
-    "\nCurrent Capacity of Stack: " << stack.getCapacity() << endl;
+    /// @see Check position and capacity.
+    cout << "Current Position in Stack: " << stack.GetPosition() <<
+    "\nCurrent Capacity of Stack: " << stack.GetCapacity() << endl;
 
-    // Add more elements to the stack.
-    while (stack.size() < 10) {
+    /// @see Add more elements to the stack.
+    while (stack.Size() < 10) {
         cout << "Pushing " << elem << " onto the stack..." << endl;
-        stack.push(elem);
+        stack.Push(elem);
         elem++;
     }
 
-    // Clear the stack.
+    /// @see Clear the stack.
     cout << "Clearing the stack..." << endl;
-    stack.clearStack();
+    stack.ClearStack();
 
-    // Return the size of the stack and check if it's empty.
-    cout << "The size of the stack is: " << stack.size() << endl;
-    cout << "Checking if stack is empty: " << stack.isEmpty() << endl;
-    cout << "Checking Vector size: " << stack.vectorSize() << endl;
+    /// @see Return the size of the stack and check if it's empty.
+    cout << "The size of the stack is: " << stack.Size() << endl;
+    cout << "Checking if stack is empty: " << stack.IsEmpty() << endl;
+    cout << "Checking Vector size: " << stack.VectorSize() << endl;
 
-    return 0;
 }

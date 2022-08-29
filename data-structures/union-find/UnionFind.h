@@ -46,7 +46,11 @@ class UnionFind {
             }
         }
 
-        /// @see The Find() function finds the root of which component 'p' belongs to.
+        /**
+         * @see The Find() function finds the root of which component 'p' belongs to.
+         * @param p The element of a given component
+         * @return Returns the root of the provided element
+         */
         int Find(int p) {
             root = p;
 
@@ -64,22 +68,33 @@ class UnionFind {
             return root;
         }
 
-        /// @see The Connected() function checks if two elements belong to the same component.
+        /**
+         * @see The Connected() function checks if two elements belong to the same component.
+         * @param p The element of a given component
+         * @param q The element of a given component
+         * @return Returns true if p and q share the same root
+         */
         bool Connected(int p, int q) {
             return Find(p) == Find(q);
         }
 
-        /// @see The ComponentSize() function returns the size of a given component.
+        /**
+         * @see The ComponentSize() function returns the size of a given component.
+         * @param p The element of a given component
+         * @return Returns the size of the component p belongs to
+         */
         int ComponentSize(int p) {
             return sz[Find(p)];
         }
 
         /// @see The Size() function returns the size of the Union Find.
+        /// @return Returns the number of elements in the union find
         int Size() {
             return size;
         }
 
         /// @see The Components() function returns the number of components in the Union Find.
+        /// @return Returns the number of components in the union find
         int Components() {
             return numComponents;
         }

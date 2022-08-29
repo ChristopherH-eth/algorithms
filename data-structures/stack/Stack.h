@@ -5,6 +5,12 @@
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *         C++ conversion by 0xChristopher
  * @brief The Stack class is used as a template for different stack types (see IntStack.h).
+ * 
+ *        Time Complexity:
+ *              Operation       Average     Worst
+ *              Push            O(1)        O(n)
+ *              Pop             O(1)        O(1)
+ *              Peek            O(1)        O(1)
  */
 
 template <typename T>
@@ -12,33 +18,34 @@ template <typename T>
 class Stack {
 
     public:
-        // The size of the stack
-        virtual int size() {
+        /// @see The size of the stack
+        virtual int Size() {
             return 0;
         }
 
-        // Checks of the stack is empty
-        virtual bool isEmpty() {
+        /// @see Checks of the stack is empty
+        virtual bool IsEmpty() {
             return 0;
         }
 
-        // Returns the element at the top of the stack
-        virtual T peek() {
+        /// @see Returns the element at the top of the stack
+        virtual T Peek() {
             return 0;
         }
 
-        // Push elements onto the stack
-        virtual void push(T elem) {}
+        /// @see Push elements onto the stack
+        /// @param elem The value to be pushed onto the stack
+        virtual void Push(T elem) {}
 
-        // Pop elements off of the stack
-        virtual T pop() {
+        /// @see Pop elements off of the stack
+        virtual T Pop() {
             return 0;
         }
 
-        // Increase stack capacity
-        virtual void increaseCapacity() {}
+        /// @see Increase stack capacity
+        virtual void IncreaseCapacity() {}
 
-        // Clear remaining elements from the stack
-        virtual void clearStack() {}
+        /// @see Clear remaining elements from the stack
+        virtual void ClearStack() {}
 
 };

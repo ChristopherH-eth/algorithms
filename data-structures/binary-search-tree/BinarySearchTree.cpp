@@ -4,7 +4,8 @@
 
 /**
  * @file BinarySearchTree.cpp
- * @author 0xChristopher
+ * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
+ *         C++ conversion by 0xChristopher
  * @brief Binary Search Tree functionality examples.
  */
 
@@ -18,25 +19,29 @@ int toRemove {7};
 int main() {
     BinarySearchTree<int> BST;
 
-    // Populating the Binary Search Tree
+    /// @see Populating the Binary Search Tree
     std::cout << "Adding root (" << root << ") node to BST..." << std::endl;
-    BST.add(root);
+    BST.Add(root);
 
     for (int i = 0; i < valueLength1; i++) {
         std::cout << "Adding value " << valueArray1[i] << " to BST..." << std::endl;
-        BST.add(valueArray1[i]);
+        BST.Add(valueArray1[i]);
     }
-    //End populating the Binary Search Tree
 
-    BST.display(); // Displays pre-order, in-order, post-order, and level-order representations of current nodes
+    /// @see Displays pre-order, in-order, post-order, and level-order representations of current nodes
+    BST.Display(); 
 
-    BST.min(); // Provides the BST min. value
+    /// @see Provides the BST min. value
+    BST.Min(); 
 
-    BST.max(); // Provides the BST max. value
+    /// @see Provides the BST max. value
+    BST.Max(); 
 
-    BST.getHeight(); // Provides the height of the BST
+    /// @see Provides the height of the BST
+    BST.GetHeight(); 
 
-    BST.rem(toRemove); // Removes a node from the BST
+    /// @see Removes a node from the BST
+    BST.Rem(toRemove); 
 
-    BST.display();
+    BST.Display();
 };

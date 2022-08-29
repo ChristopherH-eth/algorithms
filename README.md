@@ -19,10 +19,13 @@ implementations found in the header files.
 
 ## Table of Contents
 
+### Data Structures
+
 1. [Doubly Linked List](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/linked-list)
 2. [Binary Search Tree](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/binary-search-tree)
 3. [Stack](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/stack)
 4. [Hash Table](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/hashtable)
+5. [Union Find](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/union-find)
 
 ## License
 

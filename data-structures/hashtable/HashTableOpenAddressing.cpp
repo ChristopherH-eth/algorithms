@@ -16,14 +16,14 @@ int rem = 11;
 int main() {
     LinearProbing hashTable;
 
-    // Check that the hash table has been initialized
+    /// @see Check that the hash table has been initialized
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Checking capacity and load factor..." << std::endl;
     std::cout << "Capacity: " << hashTable.GetCapacity() << std::endl;
     std::cout << "Load Factor: " << hashTable.GetLoadFactor() << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
-    // Insert items into the hash table
+    /// @see Insert items into the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Populating hash table..." << std::endl;
 
@@ -34,7 +34,7 @@ int main() {
     std::cout << "Items added!" << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
-    // Check if a key exists in the hash table
+    /// @see Check if a key exists in the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     
     for (int i = 1; i < 15; i++) {
@@ -47,14 +47,14 @@ int main() {
 
     std::cout << "------------------------------------------------------" << std::endl;
 
-    // Print all items currently in the hash table
+    /// @see Print all items currently in the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Printing hash table key-value pairs..." << std::endl;
     hashTable.GetHashTableItems();
     std::cout << "\nHash table size: " << hashTable.Size() << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
-    // Remove a key-value pair from the hash table
+    /// @see Remove a key-value pair from the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Removing key " << rem << " from the hash table..." << std::endl;
     int removed = hashTable.Remove(rem);
@@ -67,21 +67,21 @@ int main() {
 
     std::cout << "------------------------------------------------------" << std::endl;
 
-    // Get the corresponding value of a key
+    /// @see Get the corresponding value of a key
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Getting the value of key " << keys[10] << "..." << std::endl;
     int val = hashTable.GetValue(keys[10]);
     std::cout << "The value of " << keys[10] << " is: " << val << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
-    // Print all items currently in the hash table
+    /// @see Print all items currently in the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Printing hash table key-value pairs..." << std::endl;
     hashTable.GetHashTableItems();
     std::cout << "\nHash table size: " << hashTable.Size() << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
-    // Clear all values in the hash table
+    /// @see Clear all values in the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Clearing table..." << std::endl;
     hashTable.Clear();
