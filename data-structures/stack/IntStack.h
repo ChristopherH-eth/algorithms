@@ -13,14 +13,12 @@
  *        stack, clear the stack and increase capacity.
  */
 
-using namespace std;
-
 template <typename T>
 
 class IntStack : public Stack<T> {
 
     private:
-        vector<int> stackVector;
+        std::vector<int> stackVector;
         int position {0}; /// Tracks the top of the stack
         int capacity {0}; /// Capacity of the stack
         int elem {0}; /// Element at given position
@@ -83,7 +81,7 @@ class IntStack : public Stack<T> {
         /// @see The increaseCapacity() function increases the capacity of the stack if max capacity
         /// is reached.
         void IncreaseCapacity() override {
-            cout << "Maximum capacity reached; increasing stack capacity..." << endl;
+            std::cout << "Maximum capacity reached; increasing stack capacity..." << std::endl;
 
             if (position == 0) {
                 capacity += 1;

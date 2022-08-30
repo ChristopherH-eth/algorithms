@@ -27,6 +27,10 @@ implementations found in the header files.
 4. [Hash Table](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/hashtable)
 5. [Union Find](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/union-find)
 
+### Algorithms
+
+1. [Merge Sort](https://github.com/ChristopherH-eth/algorithms/tree/main/sorting/merge-sort)
+
 ## License
 
 This repository is under the [MIT License](https://opensource.org/licenses/MIT).
