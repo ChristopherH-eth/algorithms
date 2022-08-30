@@ -18,12 +18,44 @@ class MergeSort {
 
     private:
         /**
+         * @see The _MergeSort() function recursively sorts two sub-vectors if the data set > 1.
+         * @param dataSet The original data set to be sorted
+         * @return Returns the merged result of the two sorted vectors
+         */
+        static std::vector<int> _MergeSort(std::vector<int> &dataSet) {
+            int n = dataSet.size();
+
+            /// Check if we have a single element
+            if (n <= 1) {
+                return dataSet;
+            }
+
+            std::vector<int> left;
+            std::vector<int> right;
+
+            for (int i = 0; i < n / 2; i++) {
+                left.push_back(dataSet[i]);
+            }
+
+            for (int i = n / 2; i < n; i++) {
+                right.push_back(dataSet[i]);
+            }
+
+            /// Split the data set and recursively sort
+            left = _MergeSort(left);
+            right = _MergeSort(right);
+
+            /// Merge both sorted vectors
+            return Merge(left, right);
+        }
+
+        /**
          * @see The Merge() function merges two sorted vectors into a larger sorted vector.
          * @param dataSet1 The first sorted vector
          * @param dataSet2 The second sorted vector
          * @return Returns the merged vector
          */
-        static std::vector<int> Merge(std::vector<int> dataSet1, std::vector<int> dataSet2) {
+        static std::vector<int> Merge(std::vector<int> &dataSet1, std::vector<int> &dataSet2) {
             int n1 = dataSet1.size(), n2 = dataSet2.size();
             int n = n1 + n2, i1 = 0, i2 = 0;
             std::vector<int> dataSet;
@@ -48,35 +80,14 @@ class MergeSort {
 
     public:
         /**
-         * @see The _MergeSort() function recursively sorts two sub-vectors if the data set > 1.
-         * @param dataSet The original data set to be sorted
-         * @return Returns the merged result of the two sorted vectors
+         * @see The Sort() function is the public facing function to invoke _MergeSort().
+         * @param dataSet The vector of data to be sorted
+         * @return Returns the sorted data set
          */
-        static std::vector<int> Sort(std::vector<int> dataSet) {
-            int n = dataSet.size();
+        std::vector<int> Sort(std::vector<int> &dataSet) {
+            std::vector<int> sortedData = _MergeSort(dataSet);
 
-            /// Check if we have a single element
-            if (n <= 1) {
-                return dataSet;
-            }
-
-            std::vector<int> left;
-            std::vector<int> right;
-
-            for (int i = 0; i < n / 2; i++) {
-                left.push_back(dataSet[i]);
-            }
-
-            for (int i = n / 2; i < n; i++) {
-                right.push_back(dataSet[i]);
-            }
-
-            /// Split the data set and recursively sort
-            left = Sort(left);
-            right = Sort(right);
-
-            /// Merge both sorted vectors
-            return Merge(left, right);
+            return sortedData;
         }
 
 };

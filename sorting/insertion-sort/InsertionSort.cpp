@@ -1,24 +1,23 @@
 #include <iostream>
-#include <vector>
-#include "MergeSort.h"
+#include "InsertionSort.h"
 
 /**
- * @file MergeSort.cpp
+ * @file InsertionSort.cpp
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *         C++ conversion by 0xChristopher
- * @brief Functional demonstration of the MergeSort class
+ * @brief Functional demonstration of the InsertionSort class
  */
 
-std::vector<int> dataSet = {44, 3, 22, 36, 11, 77, 98, -2, 9};
+std::vector<int> dataSet = {16, 2, 5, 1, 13, 3, 9};
 std::vector<int> sortedData;
 
 int main() {
-    MergeSort mergeSort;
+    InsertionSort insertionSort;
 
-    /// @see Sort data set via merge sort
+    /// @see Sort data set via insertion sort
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Sorting data set..." << std::endl;
-    sortedData = mergeSort.Sort(dataSet);
+    sortedData = insertionSort.Sort(dataSet);
     
     if (sortedData.size() != 0) {
         std::cout << "Data set sorted! Printing values...\n{ ";
@@ -33,5 +32,4 @@ int main() {
     std::cout << "------------------------------------------------------" << std::endl;
 
     std::cin.get();
-
 }
