@@ -30,6 +30,9 @@ implementations found in the header files.
 ### Algorithms
 
 1. [Merge Sort](https://github.com/ChristopherH-eth/algorithms/tree/main/sorting/merge-sort)
+2. [Insertion Sort](https://github.com/ChristopherH-eth/algorithms/tree/main/sorting/insertion-sort)
+3. [Quick Sort](https://github.com/ChristopherH-eth/algorithms/tree/main/sorting/quick-sort)
+4. [3-Way Quick Sort](https://github.com/ChristopherH-eth/algorithms/tree/main/sorting/3-way-quick-sort)
 
 ## License
 
