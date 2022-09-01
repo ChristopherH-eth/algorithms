@@ -26,6 +26,7 @@ implementations found in the header files.
 3. [Stack](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/stack)
 4. [Hash Table](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/hashtable)
 5. [Union Find](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/union-find)
+6. [Suffix Array](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/suffix-array)
 
 ### Algorithms
 
