@@ -27,7 +27,7 @@ class AVLTree {
 
     private:
         int nodeCount = 0;
-        Node<T>* TOKEN = nullptr; /// Used to indicate duplicate values in the AVL Tree
+        Node<T>* TOKEN = new Node<T>(-1, nullptr, nullptr); /// Used to indicate duplicate values in the AVL Tree
         Node<T>* tmp;
 
         /**
@@ -189,11 +189,17 @@ class AVLTree {
 
                 /// Found the node to remove    
                 } else {
-                    /// Swap with right child if it exists and left child is null
-                    if (node->left == nullptr) {
+                    /// Leaf node
+                    if ((node->left == nullptr) && (node->right == nullptr)) {
                         tmp = node;
                         std::swap(node, node->right);
-                        return node->right;
+                        return node;
+
+                    /// Swap with right child if it exists and left child is null
+                    } else if (node->left == nullptr) {
+                        tmp = node;
+                        std::swap(node, node->right);
+                        return node;
 
                     /// Swap with left child if it exists and right child is null
                     } else if (node->right == nullptr) {
@@ -258,6 +264,68 @@ class AVLTree {
                 node = node->right;
 
             return node->value;
+        }
+
+        /**
+         * @brief The ValidateBSTInvariant() function checks the AVL Tree against the Binary Search Tree
+         * invariant (all left child nodes have a value less than the parent node, and all right child nodes
+         * have a value greater than the parent node).
+         * @param node The root of the tree or subtree to be tested
+         * @return Returns true if the AVL Tree ahears to the invariant
+         */
+        bool ValidateBSTInvariant(Node<T>* node) {
+            if (node == nullptr)
+                return true;
+
+            T value = node->value;
+            bool isValid = true;
+
+            if (node->left != nullptr)
+                isValid = isValid && node->left->value < node->value;
+
+            if (node->right != nullptr)
+                isValid = isValid && node->right->value > node->value;
+
+            return isValid && ValidateBSTInvariant(node->left) && ValidateBSTInvariant(node->right);
+        }
+
+        /* Test Functions */
+        std::string prefix = "";
+        bool checkLeft = false;
+
+        void PrintAVLTree(const std::string& prefix, Node<T>*& node, bool checkLeft) {
+            if (node == nullptr)
+                return;
+
+            std::cout << prefix;
+            std::cout << (checkLeft ? "|--" : "L--");
+            std::cout << node->value << std::endl;
+
+            PrintAVLTree(prefix + (checkLeft ? "|  " : "   "), node->right, true);
+            PrintAVLTree(prefix + (checkLeft ? "|  " : "   "), node->left, false);
+        }
+
+        void DisplayNode(Node<T>*& node) {
+            if (node == nullptr)
+                return;
+
+            std::queue<Node<T>*> nodes;
+            nodes.push(node);
+
+            while (nodes.empty() == false) {
+                Node<T>* node = nodes.front();
+
+                printf("%d ", node->value);
+                nodes.pop();
+
+                if (node->left != nullptr) {
+                    nodes.push(node->left);
+                }
+
+                if (node->right != nullptr) {
+                    nodes.push(node->right);
+                }
+            }
         }
 
     public:
@@ -342,7 +410,6 @@ class AVLTree {
 
             if (removedNode) {
                 delete tmp;
-                //root = newRoot;
                 nodeCount--;
 
                 return true;
@@ -352,37 +419,16 @@ class AVLTree {
         }
 
         /* Test Functions */
+        bool CheckBSTInvariant() {
+            return ValidateBSTInvariant(root);
+        }
+
         void Display() {
             DisplayNode(root);
         }
 
-        void DisplayNode(Node<T>*& node) {
-            if (node == nullptr)
-                return;
-
-            std::queue<Node<T>*> nodes;
-            nodes.push(node);
-            int nodeHeight = node->height;
-
-            while (nodes.empty() == false) {
-                Node<T>* node = nodes.front();
-
-                // if (node->height != nodeHeight) {
-                //     printf("\n");
-                //     nodeHeight = node->height;
-                // }
-
-                printf("%d ", node->value);
-                nodes.pop();
-
-                if (node->left != nullptr) {
-                    nodes.push(node->left);
-                }
-
-                if (node->right != nullptr) {
-                    nodes.push(node->right);
-                }
-            }
+        void PrintTree() {
+            PrintAVLTree(prefix, root, checkLeft);
         }
 
 };

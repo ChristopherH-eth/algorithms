@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 /**
  * @file Node.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
@@ -27,6 +29,11 @@ class Node {
             this->value = value;
             this->left = nullptr;
             this->right = nullptr;
+        }
+
+        /// @brief Node destructor (for testing)
+        ~Node() {
+            std::cout << "Node removed" << std::endl;
         }
 
 };
