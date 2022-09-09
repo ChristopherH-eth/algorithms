@@ -26,9 +26,11 @@ template <typename T>
 class AVLTree {
 
     private:
-        int nodeCount = 0;
+        int nodeCount = 0;                                  /// Total number of nodes in the AVL Tree
+        std::string prefix = "";                            /// AVL Tree printer node prefix
+        bool checkLeft = false;                             /// Used in AVL Tree visual representation prefix printing
         Node<T>* TOKEN = new Node<T>(-1, nullptr, nullptr); /// Used to indicate duplicate values in the AVL Tree
-        Node<T>* tmp;
+        Node<T>* tmp;                                       /// Pointer used to delete removed nodes
 
         /**
          * @brief The Insert() function inserts a node into the AVL Tree
@@ -86,19 +88,17 @@ class AVLTree {
         Node<T>* Balance(Node<T>*& node) {
             /// Left heavy subtree
             if (node->bf == -2) {
-                if (node->left->bf <= 0) {
+                if (node->left->bf <= 0)
                     return LeftLeftCase(node);
-                } else {
+                else
                     return LeftRightCase(node);
-                }
 
             /// Right heavy subtree
             } else if (node->bf == 2) {
-                if (node->right->bf >= 0) {
+                if (node->right->bf >= 0)
                     return RightRightCase(node);
-                } else {
+                else
                     return RightLeftCase(node);
-                }
 
             /// Node has a balance factor of -1, 0, or 1
             } else {
@@ -106,7 +106,7 @@ class AVLTree {
             }
         }
 
-        /* Tree Rotations */
+        /****** Tree Rotations ******/
         Node<T>* LeftLeftCase(Node<T>*& node) {
             return RightRotation(node);
         }
@@ -176,7 +176,7 @@ class AVLTree {
                     if (newLeftNode == TOKEN)
                         return TOKEN;
 
-                    return newLeftNode;
+                    node->left = newLeftNode;
 
                 /// Node value is greater than the root, so dig right
                 } else if (value > node->value) {
@@ -185,29 +185,23 @@ class AVLTree {
                     if (newRightNode == TOKEN)
                         return TOKEN;
 
-                    return newRightNode;
+                    node->right = newRightNode;
 
                 /// Found the node to remove    
                 } else {
-                    /// Leaf node
-                    if ((node->left == nullptr) && (node->right == nullptr)) {
-                        tmp = node;
-                        std::swap(node, node->right);
-                        return node;
-
                     /// Swap with right child if it exists and left child is null
-                    } else if (node->left == nullptr) {
+                    if (node->left == nullptr) {
                         tmp = node;
-                        std::swap(node, node->right);
-                        return node;
+
+                        return node->right;
 
                     /// Swap with left child if it exists and right child is null
                     } else if (node->right == nullptr) {
                         tmp = node;
-                        std::swap(node, node->left);
-                        return node;
 
-                    /// Node has left and right subtrees
+                        return node->left;
+
+                    /// Node has left and right subtrees or no subtrees
                     } else {
                         /// Remove from the left subtree
                         if (node->left->height > node->right->height) {
@@ -289,10 +283,13 @@ class AVLTree {
             return isValid && ValidateBSTInvariant(node->left) && ValidateBSTInvariant(node->right);
         }
 
-        /* Test Functions */
-        std::string prefix = "";
-        bool checkLeft = false;
-
+        /**
+         * @brief The PrintAVLTree() function displays a visual representation of the current state of the AVL
+         * tree via reversed pre-order traversal.
+         * @param prefix The string prefix printed before each node value
+         * @param node The node to begin traversal from (typically the root of the tree)
+         * @param checkLeft Determines which string gets appended to the prefix
+         */
         void PrintAVLTree(const std::string& prefix, Node<T>*& node, bool checkLeft) {
             if (node == nullptr)
                 return;
@@ -305,7 +302,12 @@ class AVLTree {
             PrintAVLTree(prefix + (checkLeft ? "|  " : "   "), node->left, false);
         }
 
-        void DisplayNode(Node<T>*& node) {
+        /**
+         * @brief The DisplayNodes() function prints all of the node values within the AVL tree to the console
+         * via level order traversal.
+         * @param node The root node to begin traversal from (typically the root of the tree)
+         */
+        void DisplayNodes(Node<T>*& node) {
             if (node == nullptr)
                 return;
 
@@ -318,14 +320,52 @@ class AVLTree {
                 printf("%d ", node->value);
                 nodes.pop();
 
-                if (node->left != nullptr) {
+                if (node->left != nullptr)
                     nodes.push(node->left);
-                }
 
-                if (node->right != nullptr) {
+                if (node->right != nullptr)
                     nodes.push(node->right);
-                }
             }
+        }
+
+        /**
+         * @brief The ClearTree() function iterates over the AVL Tree via level order traversal utilizing
+         * the nodes queue, simultaneously storing each node in the removal queue to be deleted.
+         * @param node The node to begin the traversal from (typically the root of the AVL Tree)
+         */
+        void ClearTree(Node<T>*& node) {
+            if (node == nullptr)
+                return;
+
+            std::queue<Node<T>*> nodes;
+            std::queue<Node<T>*> removal;
+            nodes.emplace(node);
+
+            /// Begin level order traversal
+            while (!nodes.empty()) {
+                Node<T>* node = nodes.front();
+                removal.emplace(node);
+
+                nodes.pop();
+
+                if (node->left != nullptr)
+                    nodes.emplace(node->left);
+
+                if (node->right != nullptr)
+                    nodes.emplace(node->right);
+            }
+
+            int nodesRemoved = 0;
+
+            /// Deallocate Node memory utilizing removal queue 
+            while (!removal.empty()) {
+                delete removal.front();
+
+                removal.pop();
+                nodesRemoved++;
+            }
+
+            std::cout << nodesRemoved << " nodes removed." << std::endl;
         }
 
     public:
@@ -333,6 +373,7 @@ class AVLTree {
 
         /// @brief Default constructor/destructor
         AVLTree() {}
+
         ~AVLTree() {}
 
         /// @brief The Height() function returns the height of the AVL Tree.
@@ -366,13 +407,12 @@ class AVLTree {
 
             while (node != nullptr) {
                 if (typeid(value) == typeid(node->value) && typeid(value) != typeid(std::string)) {
-                    if (value < node->value) {
+                    if (value < node->value)
                         node = node->left;
-                    } else if (value > node->value) {
+                    else if (value > node->value)
                         node = node->right;
-                    } else {
+                    else
                         return true;
-                    }
                 }
             }
 
@@ -418,17 +458,30 @@ class AVLTree {
             return false;
         }
 
-        /* Test Functions */
+        /** 
+         * @brief The CheckBSTInvariant() function is the public facing function to check the tree against
+         * the BST invariant.
+         * @return Returns true if the BST invariant holds
+         */ 
         bool CheckBSTInvariant() {
             return ValidateBSTInvariant(root);
         }
 
+        /// @brief The Display() function is the public facing function which returns the values of the nodes
+        /// in the AVL tree via level order traversal.
         void Display() {
-            DisplayNode(root);
+            DisplayNodes(root);
         }
 
+        /// @brief The PrintTree() function is the public facing function which prints a visual representation
+        /// of the nodes currently in the AVL tree.
         void PrintTree() {
             PrintAVLTree(prefix, root, checkLeft);
+        }
+
+        /// @brief The Clear() function removes the remaining nodes from the AVL Tree.
+        void Clear() {
+            ClearTree(root);
         }
 
 };

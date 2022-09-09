@@ -16,9 +16,9 @@ class Node {
     friend class AVLTree;
 
     private:
-        int bf = 0;             /// Balance factor
+        int bf = 0;         /// Balance factor
         T value;            /// Node data
-        int height = 0;         /// Height of node within the tree
+        int height = 0;     /// Height of node within the tree
         Node* left;         /// Left child 
         Node* right;        /// Right child
 
