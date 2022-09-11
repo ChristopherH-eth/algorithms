@@ -12,6 +12,7 @@
 template <typename T>
 
 class Node {
+    
     template <typename U>
     friend class AVLTree;
 
@@ -27,8 +28,8 @@ class Node {
         /// @param value The Node data
         Node(T value, Node* left, Node* right) {
             this->value = value;
-            this->left = nullptr;
-            this->right = nullptr;
+            this->left = left;
+            this->right = right;
         }
 
         /// @brief Node destructor (for testing)

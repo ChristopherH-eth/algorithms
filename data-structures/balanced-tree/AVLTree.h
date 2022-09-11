@@ -29,8 +29,9 @@ class AVLTree {
         int nodeCount = 0;                                  /// Total number of nodes in the AVL Tree
         std::string prefix = "";                            /// AVL Tree printer node prefix
         bool checkLeft = false;                             /// Used in AVL Tree visual representation prefix printing
+        Node<T>* root = nullptr;                            /// AVL Tree root
         Node<T>* TOKEN = new Node<T>(-1, nullptr, nullptr); /// Used to indicate duplicate values in the AVL Tree
-        Node<T>* tmp;                                       /// Pointer used to delete removed nodes
+        Node<T>* tmp = nullptr;                             /// Pointer used to delete removed nodes
 
         /**
          * @brief The Insert() function inserts a node into the AVL Tree
@@ -168,7 +169,8 @@ class AVLTree {
             if (node == nullptr)
                 return TOKEN;
 
-            if (typeid(value) == typeid(node->value) && typeid(value) != typeid(std::string)) {
+            /// Only int and char compatible
+            if (typeid(value) == typeid(node->value) && (typeid(value) == typeid(int) || typeid(value) == typeid(char))) {
                 /// Node value is less than the root, so dig left
                 if (value < node->value) {
                     Node<T>* newLeftNode = Remove(node->left, value);
@@ -312,7 +314,7 @@ class AVLTree {
                 return;
 
             std::queue<Node<T>*> nodes;
-            nodes.push(node);
+            nodes.emplace(node);
 
             while (nodes.empty() == false) {
                 Node<T>* node = nodes.front();
@@ -321,10 +323,10 @@ class AVLTree {
                 nodes.pop();
 
                 if (node->left != nullptr)
-                    nodes.push(node->left);
+                    nodes.emplace(node->left);
 
                 if (node->right != nullptr)
-                    nodes.push(node->right);
+                    nodes.emplace(node->right);
             }
         }
 
@@ -369,8 +371,6 @@ class AVLTree {
         }
 
     public:
-        Node<T>* root = nullptr;
-
         /// @brief Default constructor/destructor
         AVLTree() {}
 
@@ -406,7 +406,8 @@ class AVLTree {
             Node<T>* node = root;
 
             while (node != nullptr) {
-                if (typeid(value) == typeid(node->value) && typeid(value) != typeid(std::string)) {
+                /// Only int and char compatible
+                if (typeid(value) == typeid(node->value) && (typeid(value) == typeid(int) || typeid(value) == typeid(char))) {
                     if (value < node->value)
                         node = node->left;
                     else if (value > node->value)
