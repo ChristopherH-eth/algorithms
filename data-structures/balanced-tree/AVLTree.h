@@ -374,7 +374,9 @@ class AVLTree {
         /// @brief Default constructor/destructor
         AVLTree() {}
 
-        ~AVLTree() {}
+        ~AVLTree() {
+            delete TOKEN;
+        }
 
         /// @brief The Height() function returns the height of the AVL Tree.
         /// @return Returns the height based on the root node

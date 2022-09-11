@@ -34,7 +34,10 @@ class Node {
 
         /// @brief Node destructor (for testing)
         ~Node() {
-            std::cout << "Node removed" << std::endl;
+            if (this->value == -1)
+                std::cout << "TOKEN removed" << std::endl;
+            else
+                std::cout << "Node removed" << std::endl;
         }
 
 };
