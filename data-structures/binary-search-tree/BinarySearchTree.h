@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <queue>
-#include "Node.h"
+#include "../binary-search-tree/Node.h"
 
 /**
  * @file BinarySearchTree.h
