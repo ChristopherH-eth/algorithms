@@ -27,6 +27,8 @@ class Node {
                 for (char i = 'a'; i <= 'z'; i++) {
                     this->children.emplace(i, nullptr);
                 }
+
+                std::cout << "(Node created)" << std::endl;
             }
 
         /// Root node constructor
@@ -35,10 +37,12 @@ class Node {
                 for (char i = 'a'; i <= 'z'; i++) {
                     this->children.emplace(i, nullptr);
                 }
+
+                std::cout << "(Node created)" << std::endl;
             }
 
         ~Node() {
-            std::cout << "Node removed" << std::endl;
+            std::cout << "(Node removed)" << std::endl;
         }
 
         /**

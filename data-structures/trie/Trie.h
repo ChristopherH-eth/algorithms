@@ -77,16 +77,17 @@ class Trie {
                 /// Cut this edge if the current node has a count <= 0
                 /// This means that all the prefixes below this point are inaccessible
                 if (currentNode->count <= 0) {
-                    node->children.erase(ch);
-
                     /// Free memory of soon to be inaccessible child nodes
                     for (std::map<char, Node*>::iterator it = currentNode->children.begin(); 
                         it != currentNode->children.end(); ++it) {
-                        delete it->second;
+                        Clear(it->second);
                     }
 
-                    currentNode->children.clear();
-                    currentNode = nullptr;
+                    delete currentNode;
+
+                    /// Reset the child for future entries
+                    node->children.erase(ch);
+                    node->children.emplace(ch, nullptr);
 
                     return true;
                 }
@@ -132,9 +133,17 @@ class Trie {
 
             for (std::map<char, Node*>::iterator it = root->children.begin(); 
                 it != root->children.end(); ++it) {
-                Clear(it->second);
+                if (it->second != nullptr) {
+                    Clear(it->second);
 
-                delete it->second;
+                    char ch = it->first;
+
+                    delete it->second;
+
+                    /// Reset the child for future entries
+                    root->children.erase(ch);
+                    root->children.emplace(ch, nullptr);
+                }
             }
         }
 
@@ -143,6 +152,7 @@ class Trie {
         Trie() {}
 
         ~Trie() {
+            Clear(root);
             delete root;
         }
 
@@ -176,7 +186,6 @@ class Trie {
         /// @brief The public facing Clear() function
         void Clear() {
             Clear(root);
-            root->children.clear();
         }
 
 };

@@ -11,6 +11,7 @@
 
 std::string keys[] = {"this", "that", "thankful", "solo"};
 std::string testKey = "cat";
+std::string removeKey = "that";
 
 int main() {
     Trie trie;
@@ -29,18 +30,38 @@ int main() {
     std::cout << "------------------------------------------------------" << std::endl;
 
     if (trie.Contains(keys[3]))
-        std::cout << "The Trie contains '" << keys[3] << "'" << std::endl;
+        std::cout << "The Trie contains \"" << keys[3] << "\"" << std::endl;
     else
-        std::cout << "The Trie doesn't contain '" << keys[3] << "'" << std::endl;
+        std::cout << "The Trie doesn't contain \"" << keys[3] << "\"" << std::endl;
 
     if (trie.Contains(testKey))
-        std::cout << "The Trie contains '" << testKey << "'" << std::endl;
+        std::cout << "The Trie contains \"" << testKey << "\"" << std::endl;
     else
-        std::cout << "The Trie doesn't contain '" << testKey << "'" << std::endl;
+        std::cout << "The Trie doesn't contain \"" << testKey << "\"" << std::endl;
 
     std::cout << "------------------------------------------------------" << std::endl;
 
+    /// @brief Remove particular key
+    std::cout << "------------------------------------------------------" << std::endl;
+
+    if (trie.Contains(removeKey))
+        std::cout << "The Trie contains \"" << removeKey << "\"" << std::endl;
+    else
+        std::cout << "The Trie doesn't contain \"" << removeKey << "\"" << std::endl;
+
+    std::cout << "Removing \"" << removeKey << "\"..." << std::endl;
+    trie.Remove(removeKey);
+
+    if (trie.Contains(removeKey))
+        std::cout << "The Trie contains \"" << removeKey << "\"" << std::endl;
+    else
+        std::cout << "The Trie doesn't contain \"" << removeKey << "\"" << std::endl;
+    std::cout << "------------------------------------------------------" << std::endl;
+
+    /// @brief Clear trie
+    std::cout << "------------------------------------------------------" << std::endl;
     trie.Clear();
+    std::cout << "------------------------------------------------------" << std::endl;
 
     std::cin.get();
 }
