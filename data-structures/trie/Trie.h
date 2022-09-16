@@ -5,7 +5,18 @@
  * @file Trie.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *         C++ conversion by 0xChristopher
- * @brief 
+ * @brief Trie data structure implementation. This data structure provides a way to look up values of nodes
+ *        which are stored in maps in parent nodes. For this reason, the root of the Trie is set to an
+ *        arbitrary value. Each node is marked with a boolean that determines whether or not the node value
+ *        marks the end of a word, as well as how many words the current node belongs to. This allows the
+ *        data structure to know when to remove certain nodes. The Trie is great for applications such as 
+ *        auto-complete functionality.
+ * 
+ *        Time Complexity: 
+ *              Operation       Average     Best
+ *              Insertion       O(n)        O(n)
+ *              Deletion        O(n)        O(n)
+ *              Search          O(n)        O(1)
  */
 
 class Trie {
@@ -86,8 +97,7 @@ class Trie {
                     delete currentNode;
 
                     /// Reset the child for future entries
-                    node->children.erase(ch);
-                    node->children.emplace(ch, nullptr);
+                    node->RemoveChild(ch);
 
                     return true;
                 }
@@ -141,8 +151,7 @@ class Trie {
                     delete it->second;
 
                     /// Reset the child for future entries
-                    root->children.erase(ch);
-                    root->children.emplace(ch, nullptr);
+                    root->RemoveChild(ch);
                 }
             }
         }

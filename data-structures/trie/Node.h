@@ -54,4 +54,11 @@ class Node {
             children.at(c) = node;
         }
 
+        /// @brief The RemoveChild() function removes a child node from the current nodes map and resets it.
+        /// @param c The key of the node to be removed
+        void RemoveChild(char c) {
+            children.erase(c);
+            children.emplace(c, nullptr);
+        }
+
 };
