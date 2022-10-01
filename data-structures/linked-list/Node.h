@@ -9,11 +9,20 @@
 
 template <typename T>
 
-struct Node{
+struct Node {
+
+    template <typename U>
+    friend class DoublyLinkedList;
+
+    private:
+        T m_data;             /// Information held within the node
+        Node* m_next;         /// Reference to the next node in the list
+        Node* m_previous;     /// Reference to the previous node in the list
 
     public:
-        T data;
-        Node* next; 
-        Node* previous;
+        Node(T data, Node* next, Node* previous) 
+            : m_data(data), m_next(next), m_previous(previous) {}
+
+        ~Node() {}
 
 };

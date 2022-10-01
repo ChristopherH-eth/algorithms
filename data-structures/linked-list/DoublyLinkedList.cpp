@@ -9,16 +9,16 @@
  * @brief Doubly Linked List functionality examples.
  */
 
-std::vector<int> firstValues = {2, 6, 9, 11, 3};
-std::vector<int> lastValues = {3, 4, 12, 5, 7};
-int index = 4;
-int elem = 15;
-int value = 16;
+std::vector<int> firstValues = {2, 6, 9, 11, 3};        /// First set of values to add
+std::vector<int> lastValues = {3, 4, 12, 5, 7};         /// Second set of values to add
+int index = 4;                                          /// A given index in the linked list
+int elem = 15;                                          /// Element to add/remove from the list
+int value = 16;                                         /// Value to lookup in the list
 
 int main() {
     DoublyLinkedList<int> list;
 
-    /// @see Add elements to list
+    /// @brief Add elements to list
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Populating list..." << std::endl;
 
@@ -33,7 +33,7 @@ int main() {
     }
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @see Display list, head, tail, and size
+    /// @brief Display list, head, tail, and size
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Head: " << list.PeekFirst() << std::endl;
     std::cout << "Tail: " << list.PeekLast() << std::endl;
@@ -41,7 +41,7 @@ int main() {
     list.PrintList();
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @see Add item by index
+    /// @brief Add item by index
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Adding " << elem << " to index " << index << std::endl;
     list.AddAt(index, elem);
@@ -51,7 +51,7 @@ int main() {
     list.PrintList();
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @see Remove head of list
+    /// @brief Remove head of list
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Removing node at the head of the list..." << std::endl;
     list.RemoveFirst();
@@ -61,7 +61,7 @@ int main() {
     list.PrintList();
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @see Remove tail of list
+    /// @brief Remove tail of list
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Removing node at the tail of the list..." << std::endl;
     list.RemoveLast();
@@ -71,7 +71,7 @@ int main() {
     list.PrintList();
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @see Remove item by index
+    /// @brief Remove item by index
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Removing node at index " << index << std::endl;
     list.RemoveAt(index);
@@ -81,7 +81,7 @@ int main() {
     list.PrintList();
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @see Check contains item by value
+    /// @brief Check contains item by value
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Checking if list contains " << value << std::endl;
     
@@ -94,7 +94,7 @@ int main() {
     list.PrintList();
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @see Remove item by value
+    /// @brief Remove item by value
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Removing node of value " << value << std::endl;
     list.RemoveByValue(value);
