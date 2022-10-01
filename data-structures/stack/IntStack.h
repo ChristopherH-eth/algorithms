@@ -19,29 +19,29 @@ class IntStack : public Stack<T> {
 
     private:
         std::vector<int> stackVector;
-        int position {0}; /// Tracks the top of the stack
-        int capacity {0}; /// Capacity of the stack
-        int elem {0}; /// Element at given position
+        int position = 0;                   /// Tracks the top of the stack
+        int capacity = 0;                   /// Capacity of the stack
+        int elem = 0;                       /// Element at given position
 
     public:
-        /// @see IntStack Constructor
+        /// @brief IntStack Constructor
         IntStack() {}
 
-        /// @see The size() function returns the size of the stack.
+        /// @brief The size() function returns the size of the stack.
         /// @return Returns the number of elements on the stack
-        int Size() override {
+        int Size() {
             return position;
         }
 
-        /// @see The isEmpty() function returns true if the stack is empty.
+        /// @brief The isEmpty() function returns true if the stack is empty.
         /// @return Returns true if the stack is empty
-        bool IsEmpty() override {
+        bool IsEmpty() {
             return position == 0;
         }
 
-        /// @see The peek() function returns the element at the top of the stack.
+        /// @brief The peek() function returns the element at the top of the stack.
         /// @return Returns the element at the top of the stack
-        T Peek() override {
+        T Peek() {
             if (position == 0) {
                 throw "The stack is empty!";
             }
@@ -49,9 +49,9 @@ class IntStack : public Stack<T> {
             return stackVector.back();
         }
 
-        /// @see The push() functions adds an element (value) to the top of the stack if maxSize hasn't been reached.
+        /// @brief The push() functions adds an element (value) to the top of the stack if maxSize hasn't been reached.
         /// @param value The element to be pushed onto the stack
-        void Push(T value) override {
+        void Push(T value) {
             if (position == capacity) {
                 IncreaseCapacity();
             }
@@ -60,9 +60,9 @@ class IntStack : public Stack<T> {
             position++;
         }
 
-        /// @see The pop() function removes the element from the top of the stack.
+        /// @brief The pop() function removes the element from the top of the stack.
         /// @return Returns the element popped off the stack
-        T Pop() override {
+        T Pop() {
             if (position == 0) {
                 throw "The stack is empty!";
             } else if (stackVector.size() > position) {
@@ -78,9 +78,9 @@ class IntStack : public Stack<T> {
             return elem;
         }
 
-        /// @see The increaseCapacity() function increases the capacity of the stack if max capacity
+        /// @brief The increaseCapacity() function increases the capacity of the stack if max capacity
         /// is reached.
-        void IncreaseCapacity() override {
+        void IncreaseCapacity() {
             std::cout << "Maximum capacity reached; increasing stack capacity..." << std::endl;
 
             if (position == 0) {
@@ -92,14 +92,14 @@ class IntStack : public Stack<T> {
             }
         }
 
-        /// @see The clearStack() function clears all elements in the stack.
-        void ClearStack() override {
+        /// @brief The clearStack() function clears all elements in the stack.
+        void ClearStack() {
             stackVector.clear();
             position = 0;
             capacity = 0;
         }
 
-        /* Test Functions */
+        /************ Test Functions ************/
 
         int VectorSize() {
             return stackVector.size();
