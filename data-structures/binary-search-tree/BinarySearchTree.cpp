@@ -49,5 +49,5 @@ int main() {
     BST.Rem(toRemove1);
 
     /// @brief Clears all nodes in the binary search tree
-    //BST.Clear();
+    BST.Clear();
 };

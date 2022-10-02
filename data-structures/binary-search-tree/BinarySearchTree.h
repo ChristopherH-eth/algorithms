@@ -26,7 +26,7 @@ class BinarySearchTree {
     private:
         int nodeCount = 0;              /// The number of nodes in the BST
         Node<T>* root = nullptr;        /// The root of the BST
-        Node<T>* tmp = nullptr;
+        Node<T>* tmp = nullptr;         /// Placeholder node to be deleted
 
         /// @brief The Size() function returns the size of the BinarySearchTree.
         /// @return The number of nodes in the BST
@@ -200,14 +200,12 @@ class BinarySearchTree {
                     nodes.emplace(node->m_right);
             }
 
-            int nodesRemoved = 0;
-
             /// Deallocate Node memory utilizing removal queue 
             while (!removal.empty()) {
                 delete removal.front();
 
                 removal.pop();
-                nodesRemoved++;
+                nodeCount--;
             }
         }
 
@@ -271,7 +269,6 @@ class BinarySearchTree {
         BinarySearchTree() {}
 
         ~BinarySearchTree() {
-            /// TODO check if BST is already empty
             Clear();
         }
 
@@ -332,8 +329,12 @@ class BinarySearchTree {
 
         /// @brief The Clear() function removes the remaining nodes from the BST.
         void Clear() {
-            std::cout << "\nClearing BST" << std::endl;
-            ClearTree(root);
+            if (!IsEmpty()) {
+                std::cout << "\nClearing BST" << std::endl;
+                ClearTree(root);
+            } else {
+                std::cout << "\nBST is already empty" << std::endl;
+            }
         }
 
 };
