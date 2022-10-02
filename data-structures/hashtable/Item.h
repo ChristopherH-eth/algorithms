@@ -8,14 +8,20 @@
  *        (HashTableOpenAddressing.h).
  */
 
+template <typename T>
+
 struct Item {
 
+    template <typename U>
+    friend class HashTable;
+
+    private:
+        T m_key = 0;                    /// The key of the key-value pair
+        T m_value = 0;                  /// The value of the key-value pair
+        bool m_tombstone = false;       /// Tombstone is used to mark deleted key-value pairs
+
     public:
-        int key = 0;
-        int value = 0;
-        bool tombstone = false; /// Tombstone is used to mark deleted key-value pairs
- 
-        /// @see Item Constructors
+        /// @brief Item constructors and destructor
         Item() {}
 
         /**
@@ -23,10 +29,10 @@ struct Item {
          * @param value The value of the key-value pair
          * @param tombstone A placeholder for a deleted key-value pair
          */
-        Item(int key, int value, bool tombstone) {
-            this->key = key;
-            this->value = value;
-            this->tombstone = tombstone;
+        Item(T key, T value, bool tombstone) 
+            : m_key(key), m_value(value), m_tombstone(tombstone) {
         }
+
+        ~Item() {}
 
 };

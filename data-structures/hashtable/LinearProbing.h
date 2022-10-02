@@ -11,11 +11,13 @@
  *        is HashTableOpenAddressing.h).
  */
 
-class LinearProbing : public HashTable {
+template <typename T>
+
+class LinearProbing : public HashTable<T> {
     
     private:
         /** 
-        * @see The Linear Constant can be any positive number, and it will be used such that a given
+        * @brief The Linear Constant can be any positive number, and it will be used such that a given
         * hash table will be adjusted by GCD(capacity, LINEAR_CONSTANT) = 1 so each bucket can
         * be probed.
         */
@@ -23,27 +25,27 @@ class LinearProbing : public HashTable {
 
     protected:
         /**
-         * @see The following three functions override corresponding functions in the base class to
+         * @brief The following three functions override corresponding functions in the base class to
          * implement the Linear Probing scheme.
          * @param key The key to probe for
          */
-        void SetupProbing(int key) override {
+        void SetupProbing(int key) const override {
             return;
         }
 
         /**
-         * @see The Probe() function determines the next bucket to probe for the key
+         * @brief The Probe() function determines the next bucket to probe for the key
          * @param x The given probing iteration
          * @return Returns the quotient of the LINEAR_CONSTANT and the current iteration x
          */
-        int Probe(int x) override {
+        int Probe(int x) const override {
             return LINEAR_CONSTANT * x;
         }
 
-        /// @see The AdjustCapacity() function adjusts the capacity of the hash table such that
+        /// @brief The AdjustCapacity() function adjusts the capacity of the hash table such that
         /// the GCD (greatest common denominator) of the LINEAR_CONSTANT and the capacity is 1.
-        void AdjustCapacity() override {
-            while (GCD(LINEAR_CONSTANT, capacity) != 1) {
+        void AdjustCapacity(int capacity) const override {
+            while (HashTable<T>::GCD(LINEAR_CONSTANT, capacity) != 1) {
                 capacity++;
             }
 
@@ -51,20 +53,16 @@ class LinearProbing : public HashTable {
         }
 
     public:
-        /// @see HashTable constructors for Open Addressing via Linear Probing
-        LinearProbing() {
-            HashTable();
-        }
+        /// @brief HashTable constructors for Open Addressing via Linear Probing
+        LinearProbing() {}
 
         /// @param capacity The capacity of the hash table
-        LinearProbing(int) {
-            HashTable(capacity);
-        }
+        LinearProbing(int capacity) {}
 
         /// @param capacity The capacity of the hash table
         /// @param loadFactor The acceptable hash table load before table resizing
-        LinearProbing(int capacity, double loadFactor) {
-            HashTable(capacity, loadFactor);
-        }
+        LinearProbing(int capacity, double loadFactor) {}
+
+        ~LinearProbing() {}
 
 };

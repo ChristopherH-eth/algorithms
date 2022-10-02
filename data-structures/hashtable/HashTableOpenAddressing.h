@@ -27,137 +27,147 @@
  *        Worst case time complexity (Search, Insert, Delete):  O(n)
  */
 
+template <typename T>
+
 class HashTable {
 
     protected:
-        double loadFactor;
-        int capacity, threshold;
-        int modificationCount, usedBuckets, keyCount;
-        std::vector<Item> items;
-        std::hash<int> keyHash;
+        double m_loadFactor;                                    /// Ratio before table resize
+        int m_capacity;                                         /// Total number of buckets
+        int threshold;                                          /// Number of key-value pairs allowed before resize
+        int modificationCount;                                  /// Number of modifications made to the HashTable
+        int usedBuckets;                                        /// Number of buckets containing key-value pairs
+        int keyCount;                                           /// Number of keys in the HashTable
+        std::vector<Item<T>> items;                             /// HashTable representation in vector format
+        std::hash<int> keyHash;                                 /// Hash function for keys
 
-        /// Hash table iterators
-        std::list<int> keyList;
-        std::list<int> valueList;
-        typedef std::list<int>::iterator keyIt;
-        typedef std::list<int>::iterator valueIt;
+        std::list<int> keyList;                                 /// List of HashTable keys
+        std::list<int> valueList;                               /// List of Hashtable values
+        typedef std::list<int>::iterator keyIt;                 /// Key iterator
+        typedef std::list<int>::iterator valueIt;               /// Value iterator
 
-        /// Default starting size values of a hash table
-        static int const DEFAULT_CAPACITY = 7;
-        static double constexpr DEFAULT_LOAD_FACTOR = 0.65;
+        static int const DEFAULT_CAPACITY = 7;                  /// Default capacity if one is not provided
+        static double constexpr DEFAULT_LOAD_FACTOR = 0.65;     /// Default load factor if one is not provided
 
-        /// @see These three virtual functions are used based on the desired open addressing scheme.
-        /// @param key The key to probe for
-        virtual void SetupProbing(int key) {
-            return;
-        }
+        /**
+         * @brief These three virtual functions are used based on the desired open addressing scheme.
+         * @param key The key to probe for
+         */
+        virtual void SetupProbing(int key) const = 0;
 
-        /// @see The Probe() function determines the next bucket to probe for the key
-        /// @param x The given probing iteration
-        virtual int Probe(int x) {
-            return 0;
-        }
+        /**
+         * @brief The Probe() function determines the next bucket to probe for the key
+         * @param x The given probing iteration
+         */
+        virtual int Probe(int x) const = 0;
 
-        
-        /// @see The AdjustCapacity() function adjusts the capacity of the hash table such that
-        /// the GCD (greatest common denominator) of the LINEAR_CONSTANT and the capacity is 1.
-        virtual void AdjustCapacity() {
-            return;
-        }
+        /**
+         * @brief The AdjustCapacity() function adjusts the capacity of the hash table such that
+         * the GCD (greatest common denominator) of the LINEAR_CONSTANT and the capacity is 1.
+         */
+        virtual void AdjustCapacity(int capacity) const = 0;
 
-        /// @see The IncreaseCapacity() function doubles the hash table capacity.
+        /**
+         * @brief The IncreaseCapacity() function doubles the hash table capacity.
+         */
         void IncreaseCapacity() {
-            capacity = (2 * capacity) + 1;
+            m_capacity = (2 * m_capacity) + 1;
         }
 
-        /// @see The ResizeTable() function doubles the size of the hash table once the capacity threshold
-        /// has been met.
+        /**
+         * @brief The ResizeTable() function doubles the size of the hash table once the capacity threshold
+         * has been met.
+         */
         void ResizeTable() {
             std::cout << "Table threshold reached, increasing capacity..." << std::endl;
-            int oldCapacity = capacity;
+            int oldCapacity = m_capacity;
 
             IncreaseCapacity();
-            AdjustCapacity();
+            AdjustCapacity(m_capacity);
 
-            threshold = (int) (capacity * loadFactor);
+            threshold = (int) (m_capacity * m_loadFactor);
             keyCount = usedBuckets = 0;
 
             /// Copy the original vector into a temporary vector.
-            std::vector<Item> tmpItems(items);
+            std::vector<Item<T>> tmpItems(items);
 
             /// Empty the original vector and resize to new capacity.
-            for (int i = 0; i < oldCapacity; i++) {
+            for (int i = 0; i < oldCapacity; i++)
                 items.pop_back();
-            }
 
-            items.resize(capacity);
-            std::cout << "Table resized, new capacity: " << capacity << std::endl;
+            items.resize(m_capacity);
+            std::cout << "Table resized, new capacity: " << m_capacity << std::endl;
 
             /// Reinsert the original items into the resized array
             for (int i = 0; i < oldCapacity; i++) {
-                if (tmpItems[i].key != 0 && tmpItems[i].tombstone == false) {
-                    Insert(tmpItems[i].key, tmpItems[i].value);
-                }
+                if (tmpItems[i].m_key != 0 && tmpItems[i].m_tombstone == false)
+                    Insert(tmpItems[i].m_key, tmpItems[i].m_value);
             }
         }
 
         /**
-         * @see The NoramlizeIndex() function converts a hash value to an index in the domain [0, capacity).
+         * @brief The NoramlizeIndex() function converts a hash value to an index in the domain [0, capacity).
          * @param keyHash The hash value of the current key
          * @return The hash value modulo the table capacity so we get a value in bounds
          */
         int NormalizeIndex(int keyHash) {
-            return (keyHash % capacity);
+            return (keyHash % m_capacity);
         }
 
         /**
-         * @see The GCD() function finds the greatest common denominator of the linear constant (a) and the
+         * @brief The GCD() function finds the greatest common denominator of the linear constant (a) and the
          * capacity (b).
          * @param a The linear constant (see LinearProbing.h)
          * @param b The table capacity
          * @return Returns a if b == 0, otherwise returns the capacity value of a % b
          */
         static int GCD(int a, int b) {
-            if (b == 0) {
+            if (b == 0)
                 return a;
-            }
 
             return GCD(b, a % b);
         }
 
     public:
-        /// @see Hash table constructors
+        /**
+         * @brief Hash table constructors and destructor
+         */
         HashTable() {
-            this->loadFactor = DEFAULT_LOAD_FACTOR;
-            this->capacity = DEFAULT_CAPACITY;
-            threshold = (int) (this->capacity * this->loadFactor);
+            /// Use default capacity and load factor values
+            this->m_loadFactor = DEFAULT_LOAD_FACTOR;
+            this->m_capacity = DEFAULT_CAPACITY;
+            threshold = (int) (this->m_capacity * this->m_loadFactor);
             modificationCount = usedBuckets = keyCount = 0;
             items.resize(DEFAULT_CAPACITY);
         }
 
-        /// @param capacity The pre-defined capacity of the hash table
-        HashTable(int capacity) {
+        /**
+         * @param capacity The pre-defined capacity of the hash table
+         */
+        HashTable(int capacity) 
+            : m_capacity(capacity) {
             /// Check for valid capacity
-            if (capacity <= 0) {
+            if (capacity <= 0)
                 throw "Illegal capacity";
-            }
 
-            this->loadFactor = DEFAULT_LOAD_FACTOR;
+            this->m_loadFactor = DEFAULT_LOAD_FACTOR;
             this->capacity = fmax(DEFAULT_CAPACITY, capacity);
-            threshold = (int) (this->capacity * this->loadFactor);
+            threshold = (int) (this->capacity * this->m_loadFactor);
             modificationCount = usedBuckets = keyCount = 0;
             items.resize(DEFAULT_CAPACITY);
         }
 
-        /// @param capacity The pre-defined capacity of the hash table
-        /// @param loadFactor The pre-defined load factor of the hash table
-        HashTable(int capacity, double loadFactor) {
+        /**
+         * @param capacity The pre-defined capacity of the hash table
+         * @param loadFactor The pre-defined load factor of the hash table
+         */
+        HashTable(int capacity, double loadFactor) 
+            : m_capacity(capacity), m_loadFactor(loadFactor) {
             /// Check for valid capacity and load factor
-            if (capacity <= 0) {
+            if (capacity <= 0)
                 throw "Illegal capacity";
-            } else if (loadFactor <= 0 || isnan(loadFactor) || isinf(loadFactor)) {
+            else if (loadFactor <= 0 || isnan(loadFactor) || isinf(loadFactor))
                 throw "Illegal load factor";
-            }
 
             this->loadFactor = loadFactor;
             this->capacity = fmax(DEFAULT_CAPACITY, capacity);
@@ -166,79 +176,92 @@ class HashTable {
             items.resize(DEFAULT_CAPACITY);
         } 
 
-        /// @see The Clear() function clears all heap allocated data in the hash table.
+        virtual ~HashTable() {}
+
+        /**
+         * @brief The Clear() function clears all heap allocated data in the hash table.
+         */
         void Clear() {
-            for (int i = 0; i < capacity; i++) {
+            for (int i = 0; i < m_capacity; i++)
                 items.pop_back();
-            }
 
             keyCount = usedBuckets = 0;
             modificationCount++;
         }
 
-        /// @see The Size() function returns the number of items currently inside the hash table
-        /// @return Returns the key count of the hash table
+        /**
+         * @brief The Size() function returns the number of items currently inside the hash table
+         * @return Returns the key count of the hash table
+         */
         int Size() {
             return keyCount;
         }
 
-        /// @see The GetCapacity() function returns the capacity of the hash table
-        /// @return Returns the hash table capacity
+        /**
+         * @brief The GetCapacity() function returns the capacity of the hash table
+         * @return Returns the hash table capacity
+         */
         int GetCapacity() { 
-            return capacity; 
+            return m_capacity; 
         }
 
-        /// @see The GetLoadFactor() function returns the load factor of the hash table
-        /// @return Returns the current hash table load factor
+        /**
+         * @brief The GetLoadFactor() function returns the load factor of the hash table
+         * @return Returns the current hash table load factor
+         */
         double GetLoadFactor() {
-            return loadFactor;
+            return m_loadFactor;
         }
 
-        /// @see The IsEmpty() function returns true if the hash table is empty
-        /// @return Returns true if the hash table is empty
+        /**
+         * @brief The IsEmpty() function returns true if the hash table is empty
+         * @return Returns true if the hash table is empty
+         */
         bool IsEmpty() {
             return keyCount == 0;
         }
 
-        /// @see The KeyList() function returns an index ordered list of hash table keys.
-        /// @return Returns a list of keys
+        /**
+         * @brief The KeyList() function returns an index ordered list of hash table keys.
+         * @return Returns a list of keys
+         */
         std::list<int> KeyList() {
             /// Make sure the list is empty
             if (!keyList.empty()) {
-                while (!keyList.empty()) {
+                while (!keyList.empty())
                     keyList.pop_back();
-                }
             }
 
-            for (int i = 0; i < capacity; i++) {
-                if (items[i].key != 0 && items[i].tombstone == false) {
-                    keyList.push_back(items[i].key);
-                }
+            for (int i = 0; i < m_capacity; i++) {
+                if (items[i].m_key != 0 && items[i].m_tombstone == false)
+                    keyList.emplace_back(items[i].m_key);
             }
 
             return keyList;
         }
 
-        /// @see The ValueList() function returns an index ordered list of hash table values.
-        /// @return Returns a list of values
+        /**
+         * @brief The ValueList() function returns an index ordered list of hash table values.
+         * @return Returns a list of values
+         */
         std::list<int> ValueList() {
             /// Make sure the list is empty
             if (!valueList.empty()) {
-                while (!valueList.empty()) {
+                while (!valueList.empty())
                     valueList.pop_back();
-                }
             }
 
-            for (int i = 0; i < capacity; i++) {
-                if (items[i].key != 0 && items[i].tombstone == false) {
-                    valueList.push_back(items[i].value);
-                }
+            for (int i = 0; i < m_capacity; i++) {
+                if (items[i].m_key != 0 && items[i].m_tombstone == false)
+                    valueList.emplace_back(items[i].m_value);
             }
 
             return valueList;
         }
 
-        /// @see The GetHashTableItems() function prints the hash table contents to the console by index.
+        /**
+         * @brief The GetHashTableItems() function prints the hash table contents to the console by index.
+         */
         void GetHashTableItems() {
             std::list<int> keyList = KeyList();
             std::list<int> valueList = ValueList();
@@ -250,42 +273,40 @@ class HashTable {
         }
 
         /**
-         * @see The Insert() function inserts a key-value pair into the hash table. If the key already exists,
+         * @brief The Insert() function inserts a key-value pair into the hash table. If the key already exists,
          * the value is updated. If the table threshold has been reached, the hash table is resized.
          * @param key The key of the key-value pair to be inserted
          * @param value The value of the key-value pair to be inserted
          * @return Returns either the updated key-value pair, or the newly inserted pair
          */
-        Item Insert(int key, int value) {
-            if (key == 0 || !key) {
+        Item<T> Insert(int key, int value) {
+            if (key == 0 || !key)
                 throw "Empty key";
-            } else if (usedBuckets >= threshold) {
+            else if (usedBuckets >= threshold)
                 ResizeTable();
-            }
 
             /// Hash the current key to be inserted and normalize to get the index
             int offset = NormalizeIndex(keyHash(key));
 
             for (int i = offset, j = -1, x = 1; ; i = NormalizeIndex(offset + Probe(x++))) {
                 /// Check if current index was previously deleted, contains a key, or is empty
-                if (items[i].tombstone == true) {
-                    if (j == -1) {
+                if (items[i].m_tombstone == true) {
+                    if (j == -1)
                         j = i;
-                    }
-                } else if (items[i].key != 0) {
+                } else if (items[i].m_key != 0) {
                     /// The key we're trying to insert already exists, so update the value.
-                    if (items[i].key == key) {
+                    if (items[i].m_key == key) {
                         if (j == -1) {
-                            items[i].value = value;
+                            items[i].m_value = value;
                             std::cout << "Key exists, updating value..." << std::endl;
                             modificationCount++;
 
                             return items[i];
                         } else {
                             items[j] = items[i];
-                            items[i].key = 0;
-                            items[i].value = 0;
-                            items[i].tombstone = true;
+                            items[i].m_key = 0;
+                            items[i].m_value = 0;
+                            items[i].m_tombstone = true;
                             modificationCount++;
 
                             return items[j];
@@ -296,16 +317,16 @@ class HashTable {
                     if (j == -1) {
                         usedBuckets++;
                         keyCount++;
-                        items[i].key = key;
-                        items[i].value = value;
+                        items[i].m_key = key;
+                        items[i].m_value = value;
                         std::cout << "Inserted [" << key << ", " << value << "] at index " << i << std::endl;
                         modificationCount++;
 
                         return items[i];
                     } else {
                         keyCount++;
-                        items[j].key = key;
-                        items[j].value = value;
+                        items[j].m_key = key;
+                        items[j].m_value = value;
                         std::cout << "Inserted [" << key << ", " << value << "] at index " << j << std::endl;
                         modificationCount++;
 
@@ -316,15 +337,14 @@ class HashTable {
         }
 
         /**
-         * @see The HasKey() function returns true if the key is contained within the hash table. The hash
+         * @brief The HasKey() function returns true if the key is contained within the hash table. The hash
          * table is optimized along the way if needed.
          * @param key The key to be searched for
          * @return Returns true if the key exists in the hash table
          */
         bool HasKey(int key) {
-            if (key == 0 || !key) {
+            if (key == 0 || !key)
                 throw "Empty key";
-            }
 
             SetupProbing(key);
             /// Hash the current key to be inserted and normalize to get the index
@@ -335,19 +355,18 @@ class HashTable {
             for (int i = offset, j = -1, x = 1; ; i = NormalizeIndex(offset + Probe(x++))) {
                 /// Ignore deleted cells, but record the first index in which one is encountered
                 /// to perform lazy relocation later.
-                if (items[i].tombstone == true) {
-                    if (j == -1) {
+                if (items[i].m_tombstone == true) {
+                    if (j == -1)
                         j = i;
-                    }
-                } else if (items[i].key != 0) {
+                } else if (items[i].m_key != 0) {
                     /// Check if we found the key we're looking for
-                    if (items[i].key == key) {
+                    if (items[i].m_key == key) {
                         /// Perform optimization if we've encountered a previously deleted cell
                         if (j != -1) {
                             items[j] = items[i];
-                            items[i].key = 0;
-                            items[i].value = 0;
-                            items[i].tombstone = true;
+                            items[i].m_key = 0;
+                            items[i].m_value = 0;
+                            items[i].m_tombstone = true;
                         } 
 
                         return true;
@@ -359,15 +378,14 @@ class HashTable {
         }
 
         /**
-         * @see The GetValue() function returns a value for a given key, if such a key exists in the hash
+         * @brief The GetValue() function returns a value for a given key, if such a key exists in the hash
          * table. The hash table is optimized along the way if needed.
          * @param key The key to be searched for
          * @return Returns the value of the key-value pair or 0 if the key doesn't exist
          */
         int GetValue(int key) {
-            if (key == 0 || !key) {
+            if (key == 0 || !key)
                 throw "Empty key";
-            }
 
             SetupProbing(key);
             /// Hash the current key to be inserted and normalize to get the index
@@ -378,23 +396,22 @@ class HashTable {
             for (int i = offset, j = -1, x = 1; ; i = NormalizeIndex(offset + Probe(x++))) {
                 /// Ignore deleted cells, but record the first index in which one is encountered
                 /// to perform lazy relocation later.
-                if (items[i].tombstone == true) {
-                    if (j == -1) {
+                if (items[i].m_tombstone == true) {
+                    if (j == -1)
                         j = i;
-                    }
-                } else if (items[i].key != 0) {
+                } else if (items[i].m_key != 0) {
                     /// Check if we found the key we're looking for
-                    if (items[i].key == key) {
+                    if (items[i].m_key == key) {
                         /// Perform optimization if we've encountered a previously deleted cell
                         if (j != -1) {
                             items[j] = items[i];
-                            items[i].key = 0;
-                            items[i].value = 0;
-                            items[i].tombstone = true;
+                            items[i].m_key = 0;
+                            items[i].m_value = 0;
+                            items[i].m_tombstone = true;
 
-                            return items[j].value;
+                            return items[j].m_value;
                         } else {
-                            return items[i].value;
+                            return items[i].m_value;
                         }
                     }
                 } else {
@@ -404,15 +421,14 @@ class HashTable {
         }
 
         /**
-         * @see The Remove() function removes a key-value pair from the hash table, adds a tombstone in its
+         * @brief The Remove() function removes a key-value pair from the hash table, adds a tombstone in its
          * place, and returns the value of the pair removed.
          * @param key The key to be searched for
          * @return Returns the value removed from the hash table or 0 if the key doesn't exist
          */
         int Remove(int key) {
-            if (key == 0 || !key) {
+            if (key == 0 || !key)
                 throw "Empty key";
-            }
 
             SetupProbing(key);
             /// Hash the current key to be inserted and normalize to get the index
@@ -422,18 +438,18 @@ class HashTable {
             /// in which case our item does not exist.
             for (int i = offset, j = -1, x = 1; ; i = NormalizeIndex(offset + Probe(x++))) {
                 /// Ignore deleted cells.
-                if (items[i].tombstone == true) {
+                if (items[i].m_tombstone == true) {
                     continue;
-                } else if (items[i].key != 0) {
+                } else if (items[i].m_key != 0) {
                     /// Check if we found the key we're looking for
-                    if (items[i].key == key) {
+                    if (items[i].m_key == key) {
                         keyCount--;
                         modificationCount++;
-                        int oldValue = items[i].value;
+                        int oldValue = items[i].m_value;
 
-                        items[i].key = 0;
-                        items[i].value = 0;
-                        items[i].tombstone = true;
+                        items[i].m_key = 0;
+                        items[i].m_value = 0;
+                        items[i].m_tombstone = true;
 
                         return oldValue;
                     }
