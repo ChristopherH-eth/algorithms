@@ -17,9 +17,9 @@ struct Node{
     friend class BinarySearchTree;
 
     private:
-        T data;         /// Node data
-        Node* left;     /// Left child
-        Node* right;    /// Right child
+        T m_data;         /// Node data
+        Node* m_left;     /// Left child
+        Node* m_right;    /// Right child
 
     public:
         /** 
@@ -28,11 +28,8 @@ struct Node{
          * @param left Left child
          * @param right right child
          */
-        Node(T data, Node* left, Node* right) {
-            this->data = data;
-            this->left = left;
-            this->right = right;
-        }
+        Node(T data, Node* left, Node* right) :
+            m_data(data), m_left(left), m_right(right) {}
 
         /// @brief Node destructor (for testing)
         ~Node() {

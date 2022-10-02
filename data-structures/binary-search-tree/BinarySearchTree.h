@@ -24,14 +24,9 @@ template <typename T>
 class BinarySearchTree {
 
     private:
-        int nodeCount = 0;
-        Node<T>* root = nullptr;
-
-    public:
-        /// @brief BinarySearchTree constructor and destructor
-        BinarySearchTree() {}
-
-        ~BinarySearchTree() {}
+        int nodeCount = 0;              /// The number of nodes in the BST
+        Node<T>* root = nullptr;        /// The root of the BST
+        Node<T>* tmp = nullptr;
 
         /// @brief The Size() function returns the size of the BinarySearchTree.
         /// @return The number of nodes in the BST
@@ -46,21 +41,6 @@ class BinarySearchTree {
         }
 
         /**
-         * @brief The Add(T elem) function attempts to add an element to the BST and returns true if it
-         * is successful.
-         * @param elem The value of the node to be added to the BST
-         */
-        bool Add(T elem) {
-            if (Contains(elem)) {
-                return false;
-            } else {
-                root = Add(root, elem);
-                nodeCount++;
-                return true;
-            }
-        }
-
-        /**
          * @brief The Add(Node<T>* node, T elem) function adds a new node the the BST based on the size
          * of the element to be added.
          * @param node The node to be added to the BST
@@ -71,10 +51,10 @@ class BinarySearchTree {
             if (node == nullptr) {
                 node = new Node<T>(elem, nullptr, nullptr);
             } else {
-                if (elem < node->data)
-                    node->left = Add(node->left, elem);
+                if (elem < node->m_data)
+                    node->m_left = Add(node->m_left, elem);
                 else
-                    node->right = Add(node->right, elem);
+                    node->m_right = Add(node->m_right, elem);
             }
 
             return node;
@@ -100,10 +80,10 @@ class BinarySearchTree {
             if (node == nullptr)
                 return false;
 
-            if (elem < node->data)
-                return Contains(node->left, elem);
-            else if (elem > node->data)
-                return Contains(node->right, elem);
+            if (elem < node->m_data)
+                return Contains(node->m_left, elem);
+            else if (elem > node->m_data)
+                return Contains(node->m_right, elem);
             else
                 return true;
         }
@@ -116,8 +96,8 @@ class BinarySearchTree {
         Node<T>* FindMin(Node<T>*& node) {
             Node<T>* minNode = node;
 
-            while (minNode->left != nullptr)
-                minNode = minNode->left;
+            while (minNode->m_left != nullptr)
+                minNode = minNode->m_left;
 
             return minNode;
         }
@@ -130,8 +110,8 @@ class BinarySearchTree {
         Node<T>* FindMax(Node<T>*& node) {
             Node<T>* maxNode = node;
 
-            while (maxNode->right != nullptr)
-                maxNode = maxNode->right;
+            while (maxNode->m_right != nullptr)
+                maxNode = maxNode->m_right;
 
             return maxNode;
         }
@@ -147,23 +127,25 @@ class BinarySearchTree {
                 return nullptr;
 
             /// Dig left if node is smaller than the root, otherwise dig right.
-            if (elem < node->data) {
-                node->left = Remove(node->left, elem);
-            } else if (elem > node->data) {
-                node->right = Remove(node->right, elem);
-            } else {
-                /// Check for left, right, or no subtree. If node has two links, find the smallest
-                /// value in the right subtree.
-                if (node->left == nullptr) {
-                    return node->right;
-                } else if (node->right == nullptr) {
-                    return node->left;
-                } else {
-                    Node<T>* tmp = FindMin(node->right);
+            if (elem < node->m_data)
+                node->m_left = Remove(node->m_left, elem);
+            else if (elem > node->m_data)
+                node->m_right = Remove(node->m_right, elem);
+            else {
+                /// Check for left, right, or no subtree. If node has two links, find the largest
+                /// value in the left subtree (could also be the smallest value in the right subtree).
+                if (node->m_left == nullptr)
+                    return node->m_right;
+                else if (node->m_right == nullptr)
+                    return node->m_left;
+                else {
+                    tmp = FindMax(node->m_left);
 
-                    /// Swap nodes, then remove the tmp node we found to swap with.
-                    node->data = tmp->data;
-                    node = Remove(node->right, tmp->data);
+                    /// Swap nodes, then remove the node we found to swap with.
+                    node->m_data = tmp->m_data;
+                    node->m_left = Remove(node->m_left, tmp->m_data);
+                    
+                    delete tmp;
                 }
             }
 
@@ -177,11 +159,11 @@ class BinarySearchTree {
          */
         int Height(Node<T>*& node) {
             /// If node is not null, compute left and right subtrees
-            if (node == nullptr) {
+            if (node == nullptr)
                 return 0;
-            } else {
-                int lHeight = Height(node->left);
-                int rHeight = Height(node->right);
+            else {
+                int lHeight = Height(node->m_left);
+                int rHeight = Height(node->m_right);
 
                 /// Check height of each subtree and return largest
                 if (lHeight > rHeight)
@@ -191,15 +173,53 @@ class BinarySearchTree {
             }
         }
 
+        /**
+         * @brief The ClearTree() function iterates over the BST via level order traversal utilizing
+         * the nodes queue, simultaneously storing each node in the removal queue to be deleted.
+         * @param node The node to begin the traversal from (typically the root of the BST)
+         */
+        void ClearTree(Node<T>*& node) {
+            if (node == nullptr)
+                return;
+
+            std::queue<Node<T>*> nodes;
+            std::queue<Node<T>*> removal;
+            nodes.emplace(node);
+
+            /// Begin level order traversal
+            while (!nodes.empty()) {
+                Node<T>* node = nodes.front();
+                removal.emplace(node);
+
+                nodes.pop();
+
+                if (node->m_left != nullptr)
+                    nodes.emplace(node->m_left);
+
+                if (node->m_right != nullptr)
+                    nodes.emplace(node->m_right);
+            }
+
+            int nodesRemoved = 0;
+
+            /// Deallocate Node memory utilizing removal queue 
+            while (!removal.empty()) {
+                delete removal.front();
+
+                removal.pop();
+                nodesRemoved++;
+            }
+        }
+
         /// @brief The PreOrder() function prints all of the node values in the BST via pre-order traversal.
         /// @param node The root node of the BST
         void PreOrder(Node<T>*& node) {
             if (node == nullptr)
                 return;
 
-            std::cout << node->data << " ";
-            PreOrder(node->left);
-            PreOrder(node->right);
+            std::cout << node->m_data << " ";
+            PreOrder(node->m_left);
+            PreOrder(node->m_right);
         }
 
         /// @brief The InOrder() function prints all of the node values in the BST in ascending order.
@@ -208,9 +228,9 @@ class BinarySearchTree {
             if (node == nullptr)
                 return;
 
-            InOrder(node->left);
-            std::cout << node->data << " ";
-            InOrder(node->right);
+            InOrder(node->m_left);
+            std::cout << node->m_data << " ";
+            InOrder(node->m_right);
         }
 
         /// @brief The PostOrder() function prints all of the node values in the BST via post-order traversal.
@@ -219,9 +239,9 @@ class BinarySearchTree {
             if (node == nullptr)
                 return;
 
-            PostOrder(node->left);
-            PostOrder(node->right);
-            std::cout << node->data << " ";
+            PostOrder(node->m_left);
+            PostOrder(node->m_right);
+            std::cout << node->m_data << " ";
         }
 
         /// @brief The LevelOrder() function performs a breadth-first-search using a queue.
@@ -235,17 +255,26 @@ class BinarySearchTree {
 
             while (!nodes.empty()) {
                 Node<T>* node = nodes.front();
-                std::cout << node->data << " ";
+                std::cout << node->m_data << " ";
                 nodes.pop();
 
-                if (node->left != nullptr)
-                    nodes.emplace(node->left);
+                if (node->m_left != nullptr)
+                    nodes.emplace(node->m_left);
 
-                if (node->right != nullptr)
-                    nodes.emplace(node->right);
+                if (node->m_right != nullptr)
+                    nodes.emplace(node->m_right);
             }
         }
- 
+
+    public: 
+        /// @brief BinarySearchTree constructor and destructor
+        BinarySearchTree() {}
+
+        ~BinarySearchTree() {
+            /// TODO check if BST is already empty
+            Clear();
+        }
+
         /// @brief The Display() function displays the values of all nodes in the BST in pre-order, in-order, post-order,
         /// and level-order. It then provides the total count of all the nodes in the BST.
         void Display() {
@@ -264,13 +293,13 @@ class BinarySearchTree {
         /// @brief The Min() function allows the main function to call FindMin().
         void Min() {
             std::cout << "\nFinding the minimum value..." << std::endl;
-            std::cout << "Minimum value: " << FindMin(root)->data << std::endl;
+            std::cout << "Minimum value: " << FindMin(root)->m_data << std::endl;
         }
 
         /// @brief The Max() function allows the main function to call FindMax().
         void Max() {
             std::cout << "\nFinding the maximum value..." << std::endl;
-            std::cout << "Maximum value: " << FindMax(root)->data << std::endl;
+            std::cout << "Maximum value: " << FindMax(root)->m_data << std::endl;
         }
 
         /// @brief The GetHeight() function allows the main function to call Height().
@@ -278,11 +307,33 @@ class BinarySearchTree {
             std::cout << "\nThe height of the Binary Search Tree is: " << Height(root) << std::endl;
         }
 
+        /**
+         * @brief The Add(T elem) function attempts to add an element to the BST and returns true if it
+         * is successful.
+         * @param elem The value of the node to be added to the BST
+         */
+        bool Add(T elem) {
+            if (Contains(elem)) {
+                return false;
+            } else {
+                root = Add(root, elem);
+                nodeCount++;
+                return true;
+            }
+        }
+
         /// @brief The Rem() function allows the main function to call remove().
+        /// @param elem The value of the node to be removed from the BST
         void Rem(T elem) {
             std::cout << "\nRemoving node that contains: " << elem << std::endl;
-            delete Remove(root, elem);
+            Remove(root, elem);
             nodeCount--;
+        }
+
+        /// @brief The Clear() function removes the remaining nodes from the BST.
+        void Clear() {
+            std::cout << "\nClearing BST" << std::endl;
+            ClearTree(root);
         }
 
 };
