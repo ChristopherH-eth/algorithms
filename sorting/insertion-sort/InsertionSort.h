@@ -20,14 +20,13 @@ class InsertionSort {
 
     private:
         /**
-         * @see The _InsertionSort() function sorts a data set using the insertion sort algorithm.
+         * @brief The _InsertionSort() function sorts a data set using the insertion sort algorithm.
          * @param dataSet The vector of data to be sorted
          * @return Returns if dataSet is empty
          */
-        static void _InsertionSort(std::vector<int> &dataSet) {
-            if (dataSet.size() == 0) {
+        static void ISort(std::vector<int>& dataSet) {
+            if (dataSet.size() == 0)
                 return;
-            }
 
             for (int i = 1; i < dataSet.size(); i++) {
                 for (int j = i; j > 0 && dataSet[j] < dataSet[j - 1]; j--) {
@@ -38,13 +37,13 @@ class InsertionSort {
         }
 
         /**
-         * @see The Swap() function swaps two data set members such that the smaller value (j)
+         * @brief The Swap() function swaps two data set members such that the smaller value (j)
          * comes before the larger value (i) in the set.
          * @param dataSet The vector of data to be sorted
          * @param i The larger value in the pair to be swapped
          * @param j The smaller value in the pair to be swapped
          */
-        static void Swap(std::vector<int> &dataSet, int i, int j) {
+        static void Swap(std::vector<int>& dataSet, int i, int j) {
             int tmp = dataSet[i];
             dataSet[i] = dataSet[j];
             dataSet[j] = tmp;
@@ -52,12 +51,12 @@ class InsertionSort {
 
     public:
         /**
-         * @see The Sort() function is the public facing function to invoke _InsertionSort().
+         * @brief The Sort() function is the public facing function to invoke _InsertionSort().
          * @param dataSet The vector of data to be sorted
          * @return Returns the now sorted vector
          */
-        std::vector<int> Sort(std::vector<int> &dataSet) {
-            _InsertionSort(dataSet);
+        std::vector<int> Sort(std::vector<int>& dataSet) {
+            ISort(dataSet);
 
             return dataSet;
         }
