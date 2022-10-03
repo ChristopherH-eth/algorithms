@@ -8,7 +8,7 @@
  * @brief Basic utilization of a custom stack class; in this case, used with integers.
  */
 
-int elem {0};
+int elem = 0;               /// Element to push onto the stack
 
 int main() {
     IntStack<int> stack;
@@ -28,9 +28,8 @@ int main() {
     std::cout << "Checking Vector size: " << stack.VectorSize() << std::endl;
 
     /// @brief Pop all elements off the stack
-    while (!stack.IsEmpty()) {
+    while (!stack.IsEmpty())
         std::cout << "Popping an element (" << stack.Pop() << ") off the stack..." << std::endl;
-    }
 
     /// @brief Return the size of the stack and check if it's empty.
     std::cout << "The size of the stack is: " << stack.Size() << std::endl;
@@ -64,4 +63,5 @@ int main() {
     std::cout << "Checking if stack is empty: " << stack.IsEmpty() << std::endl;
     std::cout << "Checking Vector size: " << stack.VectorSize() << std::endl;
 
+    std::cin.get();
 }
