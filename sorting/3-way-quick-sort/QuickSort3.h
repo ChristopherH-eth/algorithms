@@ -20,7 +20,7 @@ class QuickSort3 {
 
     private:
         /**
-         * @see The Partition3() function partitions the the data set such that all elements whose
+         * @brief The Partition3() function partitions the the data set such that all elements whose
          * value is equal to the pivot are grouped together.
          * @param dataSet The vector of data to be sorted
          * @param lo The lowest index of the data set or subset
@@ -28,13 +28,12 @@ class QuickSort3 {
          * @return Returns a vector m containing j and k index midpoints to be used in recursive 
          * RandomizedQuickSort() calls and further partitioning as needed.
          */
-        static std::vector<int> Partition3(std::vector<int> &dataSet, int lo, int hi) {
+        static std::vector<int> Partition3(std::vector<int>& dataSet, int lo, int hi) {
             int j, k;
 
             if (hi - lo <= 1) {
-                if (dataSet[hi] < dataSet[lo]) {
+                if (dataSet[hi] < dataSet[lo])
                     Swap(dataSet, lo, hi);
-                }
 
                 j = lo;
                 k = hi;
@@ -67,16 +66,15 @@ class QuickSort3 {
         }
 
         /**
-         * @see The RandomizedQuickSort() function chooses a pivot value at random, improving
+         * @brief The RandomizedQuickSort() function chooses a pivot value at random, improving
          * time complexity.
          * @param dataSet The vector of data to be sorted
          * @param lo The lowest index of the data set or subset
          * @param hi The highest index of the data set or subset
          */
-        static void RandomizedQuickSort(std::vector<int> &dataSet, int lo, int hi) {
-            if (lo >= hi) {
+        static void RandomizedQuickSort(std::vector<int>& dataSet, int lo, int hi) {
+            if (lo >= hi)
                 return;
-            }
 
             int k = (rand() % (hi - lo + 1) + lo);
             int t = dataSet[lo];
@@ -89,13 +87,13 @@ class QuickSort3 {
         }
 
         /**
-         * @see The Swap() function swaps two data set members such that the smaller value (j)
+         * @brief The Swap() function swaps two data set members such that the smaller value (j)
          * comes before the larger value (i) in the set.
          * @param dataSet The vector of data to be sorted
          * @param i The larger value in the pair to be swapped
          * @param j The smaller value in the pair to be swapped
          */
-        static void Swap(std::vector<int> &dataSet, int i, int j) {
+        static void Swap(std::vector<int>& dataSet, int i, int j) {
             int tmp = dataSet[i];
             dataSet[i] = dataSet[j];
             dataSet[j] = tmp;
@@ -103,11 +101,11 @@ class QuickSort3 {
 
     public:
         /**
-         * @see The Sort() function is the public facing function to invoke RandomizedQuickSort().
+         * @brief The Sort() function is the public facing function to invoke RandomizedQuickSort().
          * @param dataSet The vector of data to be sorted
          * @return Returns the now sorted vector
          */
-        std::vector<int> Sort(std::vector<int> &dataSet) {
+        std::vector<int> Sort(std::vector<int>& dataSet) {
             RandomizedQuickSort(dataSet, 0, dataSet.size() - 1);
 
             return dataSet;
