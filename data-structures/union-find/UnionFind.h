@@ -20,23 +20,23 @@
 class UnionFind {
 
     private:
-        /**
-         * @see size: The number of elements in the Union Find
-         * @see numComponents: The number of components in the union find
-         * @see sz: Tracks the size of each component
-         * @see id: id[i] points to the parent of i; if id[i] = i, then its root is itself
-         */
-        int size, numComponents, root, root1, root2;
-        std::vector<int> sz, id;
+        int m_size;                     /// The number of elements in the Union Find
+        int numComponents;              /// The number of components in the union find
+        int root, root1, root2;         /// Component roots
+        std::vector<int> sz;            /// Tracks the size of each component
+        std::vector<int> id;            /// id[i] points to the parent of i; if id[i] = i, then its root is itself
 
     public:
-        /// @see Union Find Constructor
-        UnionFind(int size) {
-            if (size <= 0) {
+        /**
+         * @brief Union Find constructor and destructor
+         * @param size The number of elements in the Union Find
+         */
+        UnionFind(int size)
+            : m_size(size) {
+            if (size <= 0)
                 throw "Size 0 or less";
-            }
 
-            this->size = numComponents = size;
+            numComponents = size;
             sz.resize(size);
             id.resize(size);
 
@@ -46,17 +46,18 @@ class UnionFind {
             }
         }
 
+        ~UnionFind() {}
+
         /**
-         * @see The Find() function finds the root of which component 'p' belongs to.
+         * @brief The Find() function finds the root of which component 'p' belongs to.
          * @param p The element of a given component
          * @return Returns the root of the provided element
          */
         int Find(int p) {
             root = p;
 
-            while (root != id[root]) {
+            while (root != id[root])
                 root = id[root];
-            }
 
             /// Compress the path back up to the root
             while (p != root) {
@@ -69,7 +70,7 @@ class UnionFind {
         }
 
         /**
-         * @see The Connected() function checks if two elements belong to the same component.
+         * @brief The Connected() function checks if two elements belong to the same component.
          * @param p The element of a given component
          * @param q The element of a given component
          * @return Returns true if p and q share the same root
@@ -79,7 +80,7 @@ class UnionFind {
         }
 
         /**
-         * @see The ComponentSize() function returns the size of a given component.
+         * @brief The ComponentSize() function returns the size of a given component.
          * @param p The element of a given component
          * @return Returns the size of the component p belongs to
          */
@@ -87,25 +88,30 @@ class UnionFind {
             return sz[Find(p)];
         }
 
-        /// @see The Size() function returns the size of the Union Find.
-        /// @return Returns the number of elements in the union find
+        /**
+         * @brief The Size() function returns the size of the Union Find.
+         * @return Returns the number of elements in the union find
+         */
         int Size() {
-            return size;
+            return m_size;
         }
 
-        /// @see The Components() function returns the number of components in the Union Find.
-        /// @return Returns the number of components in the union find
+        /**
+         * @brief The Components() function returns the number of components in the Union Find.
+         * @return Returns the number of components in the union find
+         */
         int Components() {
             return numComponents;
         }
 
-        /// @see The Unify() function attempts to unify two components at the larger component's
-        /// root, reducing the total number of components by 1.
+        /**
+         * @brief The Unify() function attempts to unify two components at the larger component's
+         * root, reducing the total number of components by 1.
+         */
         void Unify(int p, int q) {
             /// Check if these elements are already in the same group
-            if (Connected(p, q)) {
+            if (Connected(p, q))
                 return;
-            }
 
             root1 = Find(p);
             root2 = Find(q);
