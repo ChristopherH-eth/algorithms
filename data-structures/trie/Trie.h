@@ -22,8 +22,8 @@
 class Trie {
 
     private:
-        const char rootCharacter = '.';         /// Root value (arbitrary)
-        Node* root = new Node(rootCharacter);   /// Root node of Trie
+        const char rootCharacter = '.';             /// Root value (arbitrary)
+        Node* root = new Node(rootCharacter);       /// Root node of Trie
 
         /**
          * @brief The Insert() function attempts to insert a string of characters into the Trie.
@@ -135,8 +135,10 @@ class Trie {
             return 0;
         }
 
-        /// @brief The Clear() function clears all nodes and resets the Trie.
-        /// @param node The root node to clear from
+        /**
+         * @brief The Clear() function clears all nodes and resets the Trie.
+         * @param node The root node to clear from
+         */
         void Clear(Node*& root) {
             if (root == nullptr)
                 return;
@@ -157,11 +159,14 @@ class Trie {
         }
 
     public:
-        /// @brief Trie constructor and destructor
+        /**
+         * @brief Trie constructor and destructor
+         */
         Trie() {}
 
         ~Trie() {
             Clear(root);
+
             delete root;
         }
 
@@ -192,7 +197,9 @@ class Trie {
             return Count(key) != 0;
         }
 
-        /// @brief The public facing Clear() function
+        /**
+         * @brief The public facing Clear() function
+         */
         void Clear() {
             Clear(root);
         }

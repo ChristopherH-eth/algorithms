@@ -6,12 +6,12 @@
  * @file Trie.cpp
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *         C++ conversion by 0xChristopher
- * @brief 
+ * @brief Functional demonstration of the Trie data structure
  */
 
-std::string keys[] = {"this", "that", "thankful", "solo"};
-std::string testKey = "cat";
-std::string removeKey = "that";
+std::string keys[] = {"this", "that", "thankful", "solo"};          /// Strings to be added to the Trie
+std::string testKey = "cat";                                        /// Key to check if contained within the Trie
+std::string removeKey = "that";                                     /// String to remove from Trie
 
 int main() {
     Trie trie;
@@ -20,9 +20,8 @@ int main() {
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Inserting keys..." << std::endl;
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
         trie.Insert(keys[i]);
-    }
 
     std::cout << "------------------------------------------------------" << std::endl;
 
