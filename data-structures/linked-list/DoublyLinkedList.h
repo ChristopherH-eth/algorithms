@@ -31,17 +31,25 @@ class DoublyLinkedList {
         Node<T>* newNode;       /// newNode placeholder objects
 
     public:
-        /// @brief DoublyLinkedList Constructor
+        /**
+         * @brief DoublyLinkedList constructor and destructor
+         */
         DoublyLinkedList() {}
 
-        /// @brief The ListSize() function returns the size of the linked list.
-        /// @return Returns the size of the list
+        ~DoublyLinkedList() {}
+
+        /**
+         * @brief The ListSize() function returns the size of the linked list.
+         * @return Returns the size of the list
+         */
         int ListSize() {
             return size;
         }
 
-        /// @brief The IsEmpty() function returns true if the list is empty.
-        /// @return Returns true if the list is empty
+        /**
+         * @brief The IsEmpty() function returns true if the list is empty.
+         * @return Returns true if the list is empty
+         */
         bool IsEmpty() {
             return size == 0;
         }
@@ -111,32 +119,35 @@ class DoublyLinkedList {
             }
         }
 
-        /// @brief The PeekFirst() function returns the first node in the list.
-        /// @return Returns the value of the head node
+        /**
+         * @brief The PeekFirst() function returns the first node in the list.
+         * @return Returns the value of the head node
+         */
         T PeekFirst() {
-            if (IsEmpty()) {
+            if (IsEmpty())
                 throw "List is empty.";
-            }
 
             return head->m_data;
         }
 
-        /// @brief The PeekLast() function returns the last node in the list.
-        /// @return Returns the value of the tail node
+        /**
+         * @brief The PeekLast() function returns the last node in the list.
+         * @return Returns the value of the tail node
+         */
         T PeekLast() {
-            if (IsEmpty()) {
+            if (IsEmpty())
                 throw "List is empty.";
-            }
 
             return tail->m_data;
         }
 
-        /// @brief The RemoveFirst() function removes the node at the head of the linked list.
-        /// @return Returns the value of the removed head node
+        /**
+         * @brief The RemoveFirst() function removes the node at the head of the linked list.
+         * @return Returns the value of the removed head node
+         */
         T RemoveFirst() {
-            if (IsEmpty()) {
+            if (IsEmpty())
                 throw "List is empty";
-            }
 
             /// Get head data and move head pointer forward one node
             T data = head->m_data;
@@ -144,21 +155,21 @@ class DoublyLinkedList {
             size--;
 
             /// If the list is empty, set the tail to null; else, memory cleanup
-            if (IsEmpty()) {
+            if (IsEmpty())
                 tail = nullptr;
-            } else {
+            else
                 delete head->m_previous;
-            }
 
             return data;
         }
 
-        /// @brief The RemoveLast() function removes the node at the tail of the linked list.
-        /// @return Returns the value of the removed tail node
+        /**
+         * @brief The RemoveLast() function removes the node at the tail of the linked list.
+         * @return Returns the value of the removed tail node
+         */
         T RemoveLast() {
-            if (IsEmpty()) {
+            if (IsEmpty())
                 throw "List is empty";
-            }
 
             /// Get tail data and move tail pointer back one node
             T data = tail->m_data;
@@ -166,11 +177,10 @@ class DoublyLinkedList {
             size--;
 
             /// If the list is empty, set the head to null; else, memory cleanup
-            if (IsEmpty()) {
+            if (IsEmpty())
                 head = nullptr;
-            } else {
+            else
                 delete tail->m_next;
-            }
 
             return data;
         }
@@ -180,13 +190,12 @@ class DoublyLinkedList {
          * @param node The specific node to be removed
          * @return Returns the value of the removed node
          */
-        T Remove(Node<T>* node) {
+        T Remove(Node<T>*& node) {
             /// Check if the node to remove is the head or the tail
-            if (node->m_previous == nullptr) {
+            if (node->m_previous == nullptr)
                 return RemoveFirst();
-            } else if (node->m_next == nullptr) {
+            else if (node->m_next == nullptr)
                 return RemoveLast();
-            }
 
             T data = node->m_data;
             node->m_next->m_previous = node->m_previous;
@@ -209,9 +218,8 @@ class DoublyLinkedList {
          * @return Returns the value of the node removed by the Remove() function
          */
         T RemoveAt(int index) {
-            if (index < 0 || index >= size) {
+            if (index < 0 || index >= size)
                 throw "Index out of bounds";
-            }
 
             int i;
             Node<T>* trav;
@@ -220,15 +228,13 @@ class DoublyLinkedList {
             if (index < size / 2) {
                 trav = head;
 
-                for (i = 0; i != index; i++) {
+                for (i = 0; i != index; i++)
                     trav = trav->m_next;
-                }
             } else {
                 trav = tail;
 
-                for (i = size - 1; i != index; i--) {
+                for (i = size - 1; i != index; i--)
                     trav = trav->m_previous;
-                }
             }
 
             return Remove(trav);
@@ -311,7 +317,7 @@ class DoublyLinkedList {
                 trav = trav->m_next;
             }
 
-            std::cout << "" << std::endl;
+            std::cout << "\n";
         }
 
 };

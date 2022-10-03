@@ -85,11 +85,10 @@ int main() {
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Checking if list contains " << value << std::endl;
     
-    if (list.Contains(value)) {
+    if (list.Contains(value))
         std::cout << "True!" << std::endl;
-    } else {
+    else
         std::cout << "False!" << std::endl;
-    }
 
     list.PrintList();
     std::cout << "------------------------------------------------------" << std::endl;

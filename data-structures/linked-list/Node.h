@@ -15,9 +15,9 @@ struct Node {
     friend class DoublyLinkedList;
 
     private:
-        T m_data;             /// Information held within the node
-        Node* m_next;         /// Reference to the next node in the list
-        Node* m_previous;     /// Reference to the previous node in the list
+        T m_data;               /// Information held within the node
+        Node* m_next;           /// Reference to the next node in the list
+        Node* m_previous;       /// Reference to the previous node in the list
 
     public:
         Node(T data, Node* next, Node* previous) 
