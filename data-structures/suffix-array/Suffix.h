@@ -9,7 +9,10 @@
 
 struct Suffix {
 
-    int index;      /// Index of the suffix in the array
-    char *suff;     /// Suffix text
+    friend class SuffixArray;
+
+    private:
+        int index;          /// Index of the suffix in the array
+        char *suffix;       /// Suffix text
     
 };

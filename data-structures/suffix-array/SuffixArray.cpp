@@ -9,13 +9,13 @@
  * @brief Functional demonstration of the SuffixArray class
  */
 
-char text[] = "transcendence";
-std::vector<int> sa;
+char text[] = "transcendence";          /// String to be sorted into Suffix/LCP Array
+std::vector<int> sa;                    /// Vector for Suffix Array storage
 
 int main() {
     SuffixArray suffixArray(text);
 
-    /// @see Sort data into Suffix Array
+    /// @brief Sort data into Suffix Array
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Sorting data set..." << std::endl;
     sa = suffixArray.GetLcpArray();
@@ -23,16 +23,15 @@ int main() {
     if (sa.size() != 0) {
         std::cout << "Data set sorted! Printing values...\n{ ";
 
-        for (int i = 0; i < sa.size(); i++) {
+        for (int i = 0; i < sa.size(); i++)
             std::cout << sa[i] << " ";
-        }
 
         std::cout << "}" << std::endl;
     }
 
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @see Print Suffix Array and LCP Array table
+    /// @brief Print Suffix Array and LCP Array table
     std::cout << "------------------------------------------------------" << std::endl;
     suffixArray.Display();
     std::cout << "------------------------------------------------------" << std::endl;
