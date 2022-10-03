@@ -20,7 +20,7 @@ class InsertionSort {
 
     private:
         /**
-         * @brief The _InsertionSort() function sorts a data set using the insertion sort algorithm.
+         * @brief The ISort() function sorts a data set using the insertion sort algorithm.
          * @param dataSet The vector of data to be sorted
          * @return Returns if dataSet is empty
          */
@@ -51,7 +51,7 @@ class InsertionSort {
 
     public:
         /**
-         * @brief The Sort() function is the public facing function to invoke _InsertionSort().
+         * @brief The Sort() function is the public facing function to invoke ISort().
          * @param dataSet The vector of data to be sorted
          * @return Returns the now sorted vector
          */

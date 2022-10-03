@@ -8,13 +8,13 @@
  * @brief Functional demonstration of the QuickSort class
  */
 
-std::vector<int> dataSet = {16, 2, -5, 1, -13, 3, 9, 22, 8, 15, 12};
-std::vector<int> sortedData;
+std::vector<int> dataSet = {16, 2, -5, 1, -13, 3, 9, 22, 8, 15, 12};        /// Original data set
+std::vector<int> sortedData;                                                /// Sorted data set
 
 int main() {
     QuickSort quickSort;
 
-    /// @see Sort data set via quick sort
+    /// @brief Sort data set via quick sort
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Sorting data set..." << std::endl;
     sortedData = quickSort.Sort(dataSet);
@@ -22,9 +22,8 @@ int main() {
     if (sortedData.size() != 0) {
         std::cout << "Data set sorted! Printing values...\n{ ";
 
-        for (int i = 0; i < sortedData.size(); i++) {
+        for (int i = 0; i < sortedData.size(); i++)
             std::cout << sortedData[i] << " ";
-        }
 
         std::cout << "}" << std::endl;
     }
