@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <string>
+
 #include "SuffixArray.h"
 
 /**
@@ -9,11 +11,12 @@
  * @brief Functional demonstration of the SuffixArray class
  */
 
-char text[] = "transcendence";          /// String to be sorted into Suffix/LCP Array
-std::vector<int> sa;                    /// Vector for Suffix Array storage
+char text[] = "transcendence";          // String to be sorted into Suffix/LCP Array
+std::string sText = "follow";           // String to be sorted into Suffix/LCP Array
+std::vector<int> sa;                    // Vector for Suffix Array storage
 
 int main() {
-    SuffixArray suffixArray(text);
+    SuffixArray suffixArray(sText);
 
     /// @brief Sort data into Suffix Array
     std::cout << "------------------------------------------------------" << std::endl;

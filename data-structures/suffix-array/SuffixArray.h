@@ -132,10 +132,24 @@ class SuffixArray {
 
     public:
         /**
-         * @brief SuffixArray constructor and destructor
+         * @brief SuffixArray constructors and destructor
          * @param text The input to build the SA and LCP with
          */
         SuffixArray(char *text) {
+            if (strlen(text) == 0)
+                throw "Text cannot be null";
+
+            strcpy(this->t, text);
+            this->size = strlen(text);
+        }
+
+        SuffixArray(std::string& sText) {
+            int sLen = sText.length();
+            char text[sLen];
+
+            for (int i = 0; i < sText.length(); i++)
+                text[i] = sText[i];
+
             if (strlen(text) == 0)
                 throw "Text cannot be null";
 
