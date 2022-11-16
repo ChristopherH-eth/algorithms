@@ -7,12 +7,13 @@
  * @brief Suffix struct to be used in creating a Suffix Array.
  */
 
-struct Suffix {
+struct Suffix 
+{
 
     friend class SuffixArray;
 
     private:
-        int index;          /// Index of the suffix in the array
-        char *suffix;       /// Suffix text
+        int index;          // Index of the suffix in the array
+        char *suffix;       // Suffix text
     
 };
