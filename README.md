@@ -29,12 +29,16 @@ implementations found in the header files.
 6. [Suffix Array](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/suffix-array)
 7. [AVL Tree](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/balanced-tree)
 
-### Algorithms
+### Sorting Algorithms
 
 1. [Merge Sort](https://github.com/ChristopherH-eth/algorithms/tree/main/sorting/merge-sort)
 2. [Insertion Sort](https://github.com/ChristopherH-eth/algorithms/tree/main/sorting/insertion-sort)
 3. [Quick Sort](https://github.com/ChristopherH-eth/algorithms/tree/main/sorting/quick-sort)
 4. [3-Way Quick Sort](https://github.com/ChristopherH-eth/algorithms/tree/main/sorting/3-way-quick-sort)
+
+### Other Algorithms
+
+1. [Find Substrings](https://github.com/ChristopherH-eth/algorithms/tree/main/algorithms/find-substrings)
 
 ## License
 
