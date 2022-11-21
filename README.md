@@ -36,6 +36,10 @@ implementations found in the header files.
 3. [Quick Sort](https://github.com/ChristopherH-eth/algorithms/tree/main/sorting/quick-sort)
 4. [3-Way Quick Sort](https://github.com/ChristopherH-eth/algorithms/tree/main/sorting/3-way-quick-sort)
 
+### Graph Theory
+
+1. [Dijkstra's Shortest Path](https://github.com/ChristopherH-eth/algorithms/tree/main/graph-theory/dijkstras-shortest-path-adjacency-list)
+
 ### Other Algorithms
 
 1. [Find Substrings](https://github.com/ChristopherH-eth/algorithms/tree/main/algorithms/find-substrings)
