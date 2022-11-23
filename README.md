@@ -28,6 +28,7 @@ implementations found in the header files.
 5. [Union Find](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/union-find)
 6. [Suffix Array](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/suffix-array)
 7. [AVL Tree](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/balanced-tree)
+8. [Min-Indexed Priotity Queue](https://github.com/ChristopherH-eth/algorithms/tree/main/data-structures/priority-queue)
 
 ### Sorting Algorithms
 
