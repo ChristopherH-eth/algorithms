@@ -7,13 +7,25 @@
  * @file MinIndexedDHeap.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *      C++ conversion by 0xChristopher
- * @brief 
+ * @brief This file implements a template of a D-ary Heap data structure, used in creating an Indexed
+ *      Priority Queue (IPQ). While similar to a binary heap, the D-ary heap allows for faster 'decrease
+ *      priority' operations, by having a wider breadth by 'x' degree versus having a larger depth which a
+ *      binary heap would have with the same number of nodes. This makes the D-ary heap useful when used
+ *      in particular algorithms such as Dijkstra's Algorithm, where the number of decrease key operations
+ *      vastly outnumbers the amount of delete key operations.
+ * 
+ *      Time Complexity: Decrease Key: O(log_d(n)) where 'd' is the degree and 'n' is the number of nodes
+ *                       Get Min: O(d * log_d(n))
  */
 
 template <typename T>
 
 class MinIndexedDHeap
 {
+
+    // Check instantiation type (valid: double, float, int)
+    static_assert(std::is_same<T, double>::value || std::is_same<T, float>::value || 
+        std::is_same<T, int>::value, "Invalid type");
 
     private:
     int size = 0;                           // Number of elements in the heap
@@ -150,7 +162,7 @@ class MinIndexedDHeap
      */
     bool LessIndex(int i, int j)
     {
-        return (values[im[i]] - values[im[j]]) < 0 ? 0 : 1;
+        return (values[im[i]] - values[im[j]]) < 0 ? true : false;
     }
 
     /**
@@ -162,7 +174,7 @@ class MinIndexedDHeap
     */
     bool Less(T value1, T value2)
     {
-        return (value1 - value2) < 0 ? 0 : 1;
+        return (value1 - value2) < 0 ? true : false;
     }
 
     /**
@@ -213,7 +225,7 @@ class MinIndexedDHeap
             throw "Max size less than or equal to zero";
 
         this->d = fmax(2, degree);
-        this->n = fmin(d + 1, maxSize);
+        this->n = fmax(d + 1, maxSize);
 
         // Resize vectors for efficiency
         this->pm.resize(maxSize);

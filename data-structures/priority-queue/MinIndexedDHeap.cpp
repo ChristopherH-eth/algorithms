@@ -11,8 +11,9 @@
 
 int main()
 {
-    MinIndexedDHeap<int> ipq(2, 6);
+    MinIndexedDHeap<double> ipq(2, 6);
 
+    // Populate IPQ
     std::cout << "Populating indexed priority queue..." << std::endl;
 
     ipq.Insert(0, 0.0);
@@ -21,7 +22,39 @@ int main()
     ipq.Insert(4, 12.3);
     ipq.Insert(5, 6.6);
 
-    std::cout << "IPQ populated!" << std::endl;
+    std::cout << "IPQ populated! Size: " << ipq.GetSize() << std::endl;
+
+    // Check heap invariant
+    if (ipq.IsMinHeap())
+        std::cout << "Satisfies heap invariant" << std::endl;
+    else
+        std::cout << "Doesn't satisfy heap invariant" << std::endl;
+
+    // Test functionality
+    std::cout << ipq.PollMinKeyIndex() << std::endl;
+    std::cout << ipq.PeekMinValue() << std::endl;
+
+    std::cout << "Size: " << ipq.GetSize() << std::endl;
+
+    if (ipq.IsMinHeap())
+        std::cout << "Satisfies heap invariant" << std::endl;
+    else
+        std::cout << "Doesn't satisfy heap invariant" << std::endl;
+
+    // Decrease key
+    std::cout << ipq.ValueOf(4) << std::endl;
+    ipq.Decrease(4, 9.9);
+    std::cout << ipq.ValueOf(4) << std::endl;
+
+    // Increase key
+    std::cout << ipq.ValueOf(5) << std::endl;
+    ipq.Increase(5, 7.6);
+    std::cout << ipq.ValueOf(5) << std::endl;
+
+    if (ipq.IsMinHeap())
+        std::cout << "Satisfies heap invariant" << std::endl;
+    else
+        std::cout << "Doesn't satisfy heap invariant" << std::endl;
 
     return 0;
 }
