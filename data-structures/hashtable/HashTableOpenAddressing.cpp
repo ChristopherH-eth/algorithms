@@ -1,4 +1,3 @@
-#include <iostream>
 #include "LinearProbing.h"
 
 /**
@@ -8,80 +7,79 @@
  * @brief Functional demonstration of the HashTable class
  */
 
-int keys[] = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21};                       /// HashTable int keys
-char _keys[] = {'A', 'B', 'C', 'd', 'e', 'f', 'g', 'h', 'Z', 'U', 't'};     /// HashTable char keys
-int values[] = {123, 234, 345, 456, 567, 678, 789, 890, 111, 222, 333};     /// HashTable values
-int rem = 11;                                                               /// HashTable key to remove
+std::vector<int> keys = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21};                        // HashTable int keys
+std::vector<char> keys1 = {'A', 'B', 'C', 'd', 'e', 'f', 'g', 'h', 'Z', 'U', 't'};      // HashTable char keys
+std::vector<float> keys2 = {1.2, 2.3, 3.4, 4.5, 5.6, 6.7, 7.8, 8.9};                    // Hashtable float keys
+std::vector<int> values = {123, 234, 345, 456, 567, 678, 789, 890, 111, 222, 333};      // HashTable values
+float rem = 4.5;                                                                        // HashTable key to remove
 
 int main() {
-    LinearProbing<int> hashTable;
+    LinearProbing<float, int> hashTable;
 
-    /// @brief Check that the hash table has been initialized
+    // Check that the hash table has been initialized
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Checking capacity and load factor..." << std::endl;
     std::cout << "Capacity: " << hashTable.GetCapacity() << std::endl;
     std::cout << "Load Factor: " << hashTable.GetLoadFactor() << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @brief Insert items into the hash table
+    // Insert items into the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Populating hash table..." << std::endl;
 
-    for (int i = 0; i < (sizeof(keys)/sizeof(int)); i++) {
-        hashTable.Insert(keys[i], values[i]);
-    }
+    for (int i = 0; i < keys2.size(); i++)
+        hashTable.Insert(keys2[i], values[i]);
 
     std::cout << "Items added!" << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @brief Check if a key exists in the hash table
+    // Check if a key exists in the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     
-    for (int i = 1; i < 15; i++) {
-        if (hashTable.HasKey(i)) {
-            std::cout << "Hash table contains: " << i << std::endl;
-        } else {
-            std::cout << "Hash table doesn't contain: " << i << std::endl;
-        }
+    for (int i = 1; i < keys2.size(); i++) 
+    {
+        if (hashTable.HasKey(keys2[i]))
+            std::cout << "Hash table contains: " << keys2[i] << std::endl;
+        else
+            std::cout << "Hash table doesn't contain: " << keys2[i] << std::endl;
     }
 
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @brief Print all items currently in the hash table
+    // Print all items currently in the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Printing hash table key-value pairs..." << std::endl;
     hashTable.GetHashTableItems();
     std::cout << "\nHash table size: " << hashTable.Size() << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @brief Remove a key-value pair from the hash table
+    // Remove a key-value pair from the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Removing key " << rem << " from the hash table..." << std::endl;
-    int removed = hashTable.Remove(rem);
+    float removed = hashTable.Remove(rem);
 
-    if (removed) {
+    if (removed)
         std::cout << "Value of " << rem << " is " << removed << ", and was removed" << std::endl;
-    } else {
+    else
         std::cout << "Key not found" << std::endl;
-    }
 
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @brief Get the corresponding value of a key
+    // Get the corresponding value of a key
     std::cout << "------------------------------------------------------" << std::endl;
-    std::cout << "Getting the value of key " << keys[10] << "..." << std::endl;
-    int val = hashTable.GetValue(keys[10]);
-    std::cout << "The value of " << keys[10] << " is: " << val << std::endl;
+    std::cout << "Getting the value of key " << keys2[2] << "..." << std::endl;
+    float val = hashTable.GetValue(keys2[2]);
+    std::cout << "The value of " << keys2[2] << " is: " << val << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @brief Print all items currently in the hash table
+    // Print all items currently in the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Printing hash table key-value pairs..." << std::endl;
     hashTable.GetHashTableItems();
     std::cout << "\nHash table size: " << hashTable.Size() << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @brief Clear all values in the hash table
+    // Clear all values in the hash table
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Clearing table..." << std::endl;
     hashTable.Clear();

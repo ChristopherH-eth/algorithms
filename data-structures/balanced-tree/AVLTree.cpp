@@ -5,19 +5,20 @@
 /**
  * @file AVLTree.cpp
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
- *         C++ conversion by 0xChristopher
+ *      C++ conversion by 0xChristopher
  * @brief Functional demonstration of the AVLTree class
  */
 
-int root = 9;
-int rem1 = 12;
-int rem2 = 11;
-std::vector<int> data = {5, 3, 2, 7, 12, 6, 13, 24, 23, 11, 15};
+int root = 9;                                                           // Root node to add
+int rem1 = 12;                                                          // Node to remove
+int rem2 = 11;                                                          // Node to remove
+std::vector<int> data = {5, 3, 2, 7, 12, 6, 13, 24, 23, 11, 15};        // Node data vector
 
-int main() {
+int main() 
+{
     AVLTree<int> avlTree;
 
-    /// @brief Check AVL Tree initialization
+    // Check AVL Tree initialization
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Checking AVL Tree initialization..." << std::endl;
 
@@ -35,12 +36,11 @@ int main() {
         std::cout << "Tree initialized!" << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @brief Add elements to tree, display them, and validate binary search tree invariant
+    // Add elements to tree, display them, and validate binary search tree invariant
     std::cout << "------------------------------------------------------" << std::endl;
 
-    for (int i = 0; i < data.size(); i++) {
+    for (int i = 0; i < data.size(); i++)
         avlTree.CheckInsert(data[i]);
-    }
 
     std::cout << "Data successfully added" << std::endl;
     avlTree.Display();
@@ -56,7 +56,7 @@ int main() {
     avlTree.PrintTree();
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @brief Remove node from tree and validate binary search tree invariant
+    // Remove node from tree and validate binary search tree invariant
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Removing nodes: " << rem1 << " and " << rem2 << std::endl;
     avlTree.CheckRemove(rem1);
@@ -74,7 +74,7 @@ int main() {
     avlTree.PrintTree();
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @brief Check is specific values are stored in the tree
+    // Check is specific values are stored in the tree
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Checking tree contents...\n" << std::endl;
 
@@ -90,7 +90,7 @@ int main() {
 
     std::cout << "------------------------------------------------------" << std::endl;
 
-    /// @brief Clear and remove all nodes and the tree itself
+    // Clear and remove all nodes and the tree itself
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "Clearing tree...\n" << std::endl;
     avlTree.Clear();
