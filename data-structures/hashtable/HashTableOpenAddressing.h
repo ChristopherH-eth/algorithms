@@ -12,34 +12,32 @@
 /**
  * @file HashTableOpenAddressing.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
- *         C++ conversion by 0xChristopher
+ *      C++ conversion by 0xChristopher
  * @brief HashTable implementation which allows users to construct hash tables either with
- *        default dimensions, or dimensions of their own. Once created, a user can insert new
- *        items, remove items, check if certain keys exist, print the current key-value pairs
- *        stored in the hash table, and return the value of a pair using its key. The hash
- *        table automatically resizes once a certain threshold has been met, and will 
- *        optimize itself while doing so. It also has built in optimizations when performing
- *        insert, remove, and value check functions.
+ *      default dimensions, or dimensions of their own. Once created, a user can insert new
+ *      items, remove items, check if certain keys exist, print the current key-value pairs
+ *      stored in the hash table, and return the value of a pair using its key. The hash
+ *      table automatically resizes once a certain threshold has been met, and will 
+ *      optimize itself while doing so. It also has built in optimizations when performing
+ *      insert, remove, and value check functions.
  * 
- *        Open Addressing is used to resolve hash collisions, and this table currently uses
- *        a linear probing method (found in LinearProbing.h of this repository).
+ *      Open Addressing is used to resolve hash collisions, and this table currently uses
+ *      a linear probing method (found in LinearProbing.h of this repository).
  * 
- *        Best case time complexity (Search, Insert, Delete):   O(1)
- *        Worst case time complexity (Search, Insert, Delete):  O(n)
+ *      Best case time complexity (Search, Insert, Delete):   O(1)
+ *      Worst case time complexity (Search, Insert, Delete):  O(n)
  */
-
-// TODO: Fix hashing for floats/doubles
 
 template <typename T, typename U>
 
 class HashTable {
 
     // Check instantiation type (valid: double, float, int, char)
-    static_assert(std::is_same<T, double>::value || std::is_same<T, float>::value || 
-        std::is_same<T, int>::value || std::is_same<T, char>::value, "Invalid type");
+    static_assert(std::is_same<T, int>::value || std::is_same<T, char>::value, "Invalid type");
 
     static_assert(std::is_same<U, double>::value || std::is_same<U, float>::value || 
-        std::is_same<U, int>::value || std::is_same<U, char>::value, "Invalid type");
+        std::is_same<U, int>::value || std::is_same<U, char>::value || std::is_same<U, std::string>::value, 
+        "Invalid type");
 
     protected:
     double m_loadFactor;                                    // Ratio before table resize
@@ -130,7 +128,7 @@ class HashTable {
 
     /**
      * @brief The GCD() function finds the greatest common denominator of the linear constant (a) and the
-     * capacity (b).
+     *      capacity (b).
      * @param a The linear constant (see LinearProbing.h)
      * @param b The table capacity
      * @return Returns a if b == 0, otherwise returns the capacity value of a % b
@@ -345,7 +343,13 @@ class HashTable {
                     {
                         items[j] = items[i];
                         items[i].m_key = 0;
-                        items[i].m_value = 0;
+                        
+                        // Reset value according to whether or not we are dealing with a string
+                        if (!std::is_same_v<decltype(items[i].m_value), std::string>)
+                            items[i].m_value = (U) 0;
+                        else
+                            items[i].m_value = "";
+
                         items[i].m_tombstone = true;
                         modificationCount++;
 
@@ -417,7 +421,13 @@ class HashTable {
                     {
                         items[j] = items[i];
                         items[i].m_key = 0;
-                        items[i].m_value = 0;
+                        
+                        // Set value according to whether or not we are dealing with a string
+                        if (!std::is_same_v<decltype(items[i].m_value), std::string>)
+                            items[i].m_value = (U) 0;
+                        else
+                            items[i].m_value = "";
+
                         items[i].m_tombstone = true;
                     } 
 
@@ -425,9 +435,7 @@ class HashTable {
                 }
             } 
             else 
-            {
                 return false;
-            }
         }
     }
 
@@ -467,7 +475,13 @@ class HashTable {
                     {
                         items[j] = items[i];
                         items[i].m_key = 0;
-                        items[i].m_value = 0;
+
+                        // Set value according to whether or not we are dealing with a string
+                        if (!std::is_same_v<decltype(items[i].m_value), std::string>)
+                            items[i].m_value = (U) 0;
+                        else
+                            items[i].m_value = "";
+
                         items[i].m_tombstone = true;
 
                         return items[j].m_value;
@@ -480,7 +494,11 @@ class HashTable {
             } 
             else 
             {
-                return 0;
+                // Return value according to whether or not we are dealing with a string
+                if (!std::is_same_v<decltype(items[i].m_value), std::string>)
+                    return (U) 0;
+                else
+                    return "";
             }
         }
     }
@@ -514,17 +532,29 @@ class HashTable {
                 {
                     keyCount--;
                     modificationCount++;
-                    int oldValue = items[i].m_value;
+                    U oldValue = items[i].m_value;
 
                     items[i].m_key = 0;
-                    items[i].m_value = 0;
+
+                    // Set value according to whether or not we are dealing with a string
+                    if (!std::is_same_v<decltype(items[i].m_value), std::string>)
+                        items[i].m_value = (U) 0;
+                    else
+                        items[i].m_value = "";
+
                     items[i].m_tombstone = true;
 
                     return oldValue;
                 }
             } 
             else
-                return 0;
+            {
+                // Return value according to whether or not we are dealing with a string
+                if (!std::is_same_v<decltype(items[i].m_value), std::string>)
+                    return (U) 0;
+                else
+                    return "";
+            }
         }
     }
 

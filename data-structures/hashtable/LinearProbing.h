@@ -5,10 +5,10 @@
 /**
  * @file LinearProbing.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
- *         C++ conversion by 0xChristopher
+ *      C++ conversion by 0xChristopher
  * @brief The LinearProbing class is derived from the HashTable class, and provides override 
- *        functions to a HashTable in order for it to adopt a linear probing scheme (source file
- *        is HashTableOpenAddressing.h).
+ *      functions to a HashTable in order for it to adopt a linear probing scheme (source file
+ *      is HashTableOpenAddressing.h).
  */
 
 template <typename T, typename U>
@@ -17,11 +17,11 @@ class LinearProbing : public HashTable<T, U>
 {
 
     // Check instantiation type (valid: double, float, int, char)
-    static_assert(std::is_same<T, double>::value || std::is_same<T, float>::value || 
-        std::is_same<T, int>::value || std::is_same<T, char>::value, "Invalid type");
+    static_assert(std::is_same<T, int>::value || std::is_same<T, char>::value, "Invalid type");
 
     static_assert(std::is_same<U, double>::value || std::is_same<U, float>::value || 
-        std::is_same<U, int>::value || std::is_same<U, char>::value, "Invalid type");
+        std::is_same<U, int>::value || std::is_same<U, char>::value || std::is_same<U, std::string>::value, 
+        "Invalid type");
     
     private:
         /** 
@@ -90,6 +90,9 @@ class LinearProbing : public HashTable<T, U>
 
         }
 
-        ~LinearProbing() {}
+        ~LinearProbing() 
+        {
+            
+        }
 
 };
