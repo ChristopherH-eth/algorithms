@@ -13,7 +13,7 @@ struct Suffix
     friend class SuffixArray;
 
     private:
-        int index;          // Index of the suffix in the array
-        char *suffix;       // Suffix text
+        int index;                  // Index of the suffix in the array
+        std::string suffix;         // Suffix text
     
 };

@@ -8,19 +8,21 @@
  * @file SuffixArray.cpp
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
  *      C++ conversion by 0xChristopher
- * @brief Functional demonstration of the SuffixArray class
+ * @brief SuffixArray class source file
  */
 
 /**
  * @brief SuffixArray constructor with char array as input
  */
-SuffixArray::SuffixArray(char *text) 
+SuffixArray::SuffixArray(const char* text) 
 {
     if (strlen(text) == 0)
         throw "Text cannot be null";
 
-    strcpy(this->t, text);
-    this->size = strlen(text);
+    std::string sText(text);
+
+    this->t = sText;
+    this->size = sText.length();
 }
 
 /**
@@ -28,13 +30,11 @@ SuffixArray::SuffixArray(char *text)
  */
 SuffixArray::SuffixArray(std::string& sText) 
 {
-    const char* text = sText.c_str();
-
-    if (strlen(text) == 0)
+    if (sText.length() == 0)
         throw "Text cannot be null";
 
-    strcpy(this->t, text);
-    this->size = strlen(text);
+    this->t = sText;
+    this->size = sText.length();
 }
 
 SuffixArray::~SuffixArray() 
@@ -66,8 +66,10 @@ void SuffixArray::Kasai()
     for (int i = 0; i < size; i++)
         inv[sa[i]] = i;
 
-    for (int i = 0, len = 0; i < size; i++) {
-        if (inv[i] > 0) {
+    for (int i = 0, len = 0; i < size; i++) 
+    {
+        if (inv[i] > 0) 
+        {
             int k = sa[inv[i] - 1];
 
             while ((i + len < size) && (k + len < size) && t[i + len] == t[k + len])
@@ -110,14 +112,14 @@ void SuffixArray::BuildLcpArray()
 /**
  * @brief The Construct() function builds the Suffix Array.
  */
-std::vector<int> SuffixArray::Construct(char *t, int n) 
+std::vector<int> SuffixArray::Construct(std::string& t, int n) 
 {
     suffixes.resize(n);
 
     for (int i = 0; i < n; i++) 
     {
         suffixes[i].index = i;
-        suffixes[i].suffix = (t + i);
+        suffixes[i].suffix = t.substr((0 + i), (size - i));
     }
 
     std::sort(suffixes.begin(), suffixes.end(), Compare);
@@ -135,7 +137,11 @@ std::vector<int> SuffixArray::Construct(char *t, int n)
  */
 int SuffixArray::Compare(Suffix& a, Suffix& b) 
 {
-    return strcmp(a.suffix, b.suffix) < 0 ? 1 : 0;
+    // Make suffix strings comparable
+    const char* sufA = a.suffix.c_str();
+    const char* sufB = b.suffix.c_str();
+
+    return strcmp(sufA, sufB) < 0 ? true : false;
 }
 
 /**
@@ -175,7 +181,10 @@ void SuffixArray::DisplayTable()
     printf("-----i-----SA-----LCP---Suffix\n");
 
     for (int i = 0; i < size; i++)
-        printf("% 6d % 6d % 6d % 3s % s\n", i, sa[i], lcp[i], "", suffixes[i].suffix);
+    {
+        const char* suf = suffixes[i].suffix.c_str();
+        printf("%6d %6d %6d %3s %s\n", i, sa[i], lcp[i], "", suf);
+    }
 }
 
 /**
@@ -184,7 +193,10 @@ void SuffixArray::DisplayTable()
 void SuffixArray::DisplaySA()
 {
     for (int i = 0; i < size; i++)
-        printf("%d: %s\n", sa[i], suffixes[i].suffix);
+    {
+        const char* suf = suffixes[i].suffix.c_str();
+        printf("%d: %s\n", sa[i], suf);
+    }
 }
 
 int main() 

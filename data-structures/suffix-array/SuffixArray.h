@@ -36,6 +36,7 @@ class SuffixArray
 
     protected:
         int size;                               // Length of the suffix array
+        std::string t;                          // Suffix Array input text
         std::vector<int> sa;                    // Sorted suffix array values
         std::vector<int> lcp;                   // Longest common prefix array
         std::vector<Suffix> suffixes;           // All possible suffixes for given text
@@ -57,7 +58,7 @@ class SuffixArray
          * @param n The length of the text input
          * @return Returns the Suffix Array
          */
-        std::vector<int> Construct(char *t, int n);
+        std::vector<int> Construct(std::string& t, int n);
 
         /**
          * @brief The Compare() function compares two suffixes. If the first character that does
@@ -67,14 +68,12 @@ class SuffixArray
          */
         static int Compare(Suffix& a, Suffix& b);
 
-        char t[];               // Suffix Array input text
-
     public:
         /**
          * @brief SuffixArray constructor with char array as input
          * @param text The input to build the SA and LCP with
          */
-        SuffixArray(char *text);
+        SuffixArray(const char* text);
 
         /**
          * @brief SuffixArray constructor with string as input
