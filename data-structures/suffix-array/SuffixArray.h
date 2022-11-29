@@ -10,14 +10,14 @@
 /**
  * @file SuffixArray.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
- *         C++ conversion by 0xChristopher
+ *      C++ conversion by 0xChristopher
  * @brief Suffix Array (SA) implementation which also builds a Longest Common Prefix Array (LCP)
- *        using the Kasai Algorithm. This implementation takes in a char[] as text to build the
- *        SA and LCP, and displays the result in an easy to digest table. The SA utilizes a
- *        naive method to build, and is achieved simply by comparing two suffixes of those 
- *        populated in an unsorted vector, and sorting based on those comparisons.
+ *      using the Kasai Algorithm. This implementation takes in a char[] as text to build the
+ *      SA and LCP, and displays the result in an easy to digest table. The SA utilizes a
+ *      naive method to build, and is achieved simply by comparing two suffixes of those 
+ *      populated in an unsorted vector, and sorting based on those comparisons.
  * 
- *        Time Complexity:
+ *      Time Complexity:
  *              Sorting                 O(n*k*logn)     where k is the max string length
  *              Kasai's Algorithm       O(n)            to create LCP array
  */
@@ -32,73 +32,24 @@ class SuffixArray
         /**
          * @brief The Kasai() function uses the Kasai algorithm to build the LCP Array.
          */
-        void Kasai() 
-        {
-            std::vector<int> inv;
-
-            if (lcp.size() != 0) 
-            {
-                for (int i = 0; i < size; i++)
-                    lcp.pop_back();
-            }
-
-            if (inv.size() != 0) {
-                for (int i = 0; i < size; i++)
-                    inv.pop_back();
-            }
-
-            lcp.resize(size);
-            inv.resize(size);
-
-            for (int i = 0; i < size; i++)
-                inv[sa[i]] = i;
-
-            for (int i = 0, len = 0; i < size; i++) {
-                if (inv[i] > 0) {
-                    int k = sa[inv[i] - 1];
-
-                    while ((i + len < size) && (k + len < size) && t[i + len] == t[k + len])
-                        len++;
-
-                    lcp[inv[i]] = len;
-
-                    if (len > 0)
-                        len--;
-                }
-            }
-        }
+        void Kasai();
 
     protected:
-        int size;                           // Length of the suffix array
-        std::vector<int> sa;                // Sorted suffix array values
-        std::vector<int> lcp;               // Longest common prefix array
-        std::vector<Suffix> suffixes;       // All possible suffixes for given text
+        int size;                               // Length of the suffix array
+        std::vector<int> sa;                    // Sorted suffix array values
+        std::vector<int> lcp;                   // Longest common prefix array
+        std::vector<Suffix> suffixes;           // All possible suffixes for given text
 
         /**
          * @brief The BuildSuffixArray() function calls the Construct() function.
          */
-        void BuildSuffixArray() 
-        {
-            if (constructedSa)
-                return;
-
-            Construct(t, size);
-            constructedSa = true;
-        }
+        void BuildSuffixArray();
 
         /**
          * @brief The BuildLcpArray() function builds the LCP Array by building the Suffix
          *      Array and then running the Kasai algorithm.
          */
-        void BuildLcpArray() 
-        {
-            if (constructedLcpArray)
-                return;
-
-            BuildSuffixArray();
-            Kasai();
-            constructedLcpArray = true;
-        }
+        void BuildLcpArray();
 
         /**
          * @brief The Construct() function builds the Suffix Array.
@@ -106,23 +57,7 @@ class SuffixArray
          * @param n The length of the text input
          * @return Returns the Suffix Array
          */
-        std::vector<int> Construct(char *t, int n) 
-        {
-            suffixes.resize(n);
-
-            for (int i = 0; i < n; i++) 
-            {
-                suffixes[i].index = i;
-                suffixes[i].suffix = (t + i);
-            }
-
-            std::sort(suffixes.begin(), suffixes.end(), Compare);
-
-            for (int i = 0; i < n; i++)
-                sa.emplace_back(suffixes[i].index);
-
-            return sa;
-        }
+        std::vector<int> Construct(char *t, int n);
 
         /**
          * @brief The Compare() function compares two suffixes. If the first character that does
@@ -130,10 +65,7 @@ class SuffixArray
          *      otherwise it returns 0.
          * @return Returns the result of suffix comparisons
          */
-        static int Compare(Suffix& a, Suffix& b) 
-        {
-            return strcmp(a.suffix, b.suffix) < 0 ? 1 : 0;
-        }
+        static int Compare(Suffix& a, Suffix& b);
 
         char t[];               // Suffix Array input text
 
@@ -142,85 +74,43 @@ class SuffixArray
          * @brief SuffixArray constructor with char array as input
          * @param text The input to build the SA and LCP with
          */
-        SuffixArray(char *text) 
-        {
-            if (strlen(text) == 0)
-                throw "Text cannot be null";
-
-            strcpy(this->t, text);
-            this->size = strlen(text);
-        }
+        SuffixArray(char *text);
 
         /**
          * @brief SuffixArray constructor with string as input
          * @param sText The input to build the SA and LCP with
          */
-        SuffixArray(std::string& sText) 
-        {
-            const char* text = sText.c_str();
+        SuffixArray(std::string& sText);
 
-            if (strlen(text) == 0)
-                throw "Text cannot be null";
-
-            strcpy(this->t, text);
-            this->size = strlen(text);
-        }
-
-        ~SuffixArray() 
-        {
-
-        }
+        ~SuffixArray();
 
         /**
          * @brief The GetTextLength() function gets the length of the text input.
          * @return Returns the size of the text vector
          */
-        int GetTextLength() 
-        {
-            return size;
-        }
+        int GetTextLength();
 
         /**
          * @brief The GetSa() function calls the BuildSuffixArray() function.
          * @return Returns the sorted suffix array values
          */
-        std::vector<int> GetSa() 
-        {
-            BuildSuffixArray();
-
-            return sa;
-        }
+        std::vector<int> GetSa();
 
         /**
          * @brief The GetLcpArray() function calls the BuildLcpArray() function.
          * @return Returns the LCP Array
          */
-        std::vector<int> GetLcpArray() 
-        {
-            BuildLcpArray();
-
-            return lcp;
-        }
+        std::vector<int> GetLcpArray();
 
         /**
          * @brief The DisplayTable() function displays the Suffix and LCP Arrays in an easy to read
          *      format.
          */
-        void DisplayTable() 
-        {
-            printf("-----i-----SA-----LCP---Suffix\n");
-
-            for (int i = 0; i < size; i++)
-                printf("% 6d % 6d % 6d % 3s % s\n", i, sa[i], lcp[i], "", suffixes[i].suffix);
-        }
+        void DisplayTable();
 
         /**
          * @brief The DisplaySA() function displays the Suffix Array in an easy to read format.
          */
-        void DisplaySA()
-        {
-            for (int i = 0; i < size; i++)
-                printf("%d: %s\n", sa[i], suffixes[i].suffix);
-        }
+        void DisplaySA();
     
 };

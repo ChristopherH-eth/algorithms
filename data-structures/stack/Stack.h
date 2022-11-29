@@ -3,10 +3,10 @@
 /**
  * @file Stack.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
- *         C++ conversion by 0xChristopher
+ *      C++ conversion by 0xChristopher
  * @brief The Stack class is used as an interface for different stack types (see IntStack.h).
  * 
- *        Time Complexity:
+ *      Time Complexity:
  *              Operation       Average     Worst
  *              Push            O(1)        O(n)
  *              Pop             O(1)        O(1)
@@ -17,13 +17,22 @@ template <typename T>
 
 class Stack {
 
+    // Check instantiation type (valid: double, float, int, char)
+    static_assert(std::is_same<T, int>::value, "Invalid type");
+
     public:
         /**
          * @brief Stack constructor and destructor
          */
-        Stack() {}
+        Stack() 
+        {
 
-        virtual ~Stack() {}
+        }
+
+        virtual ~Stack() 
+        {
+
+        }
 
         /**
          * @brief The size of the stack

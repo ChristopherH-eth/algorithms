@@ -3,7 +3,7 @@
 /**
  * @file Suffix.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
- *         C++ conversion by 0xChristopher
+ *      C++ conversion by 0xChristopher
  * @brief Suffix struct to be used in creating a Suffix Array.
  */
 

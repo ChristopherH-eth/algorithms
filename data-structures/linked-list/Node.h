@@ -3,7 +3,7 @@
 /**
  * @file Node.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
- *         C++ conversion by 0xChristopher
+ *      C++ conversion by 0xChristopher
  * @brief The Node struct contains the Node variables and pointers.
  */
 
@@ -14,15 +14,24 @@ struct Node {
     template <typename U>
     friend class DoublyLinkedList;
 
+    // Check instantiation type (valid: double, float, int, char)
+    static_assert(std::is_same<T, int>::value, "Invalid type");
+
     private:
-        T m_data;               /// Information held within the node
-        Node* m_next;           /// Reference to the next node in the list
-        Node* m_previous;       /// Reference to the previous node in the list
+        T m_data;               // Information held within the node
+        Node* m_next;           // Reference to the next node in the list
+        Node* m_previous;       // Reference to the previous node in the list
 
     public:
         Node(T data, Node* next, Node* previous) 
-            : m_data(data), m_next(next), m_previous(previous) {}
+            : m_data(data), m_next(next), m_previous(previous) 
+        {
 
-        ~Node() {}
+        }
+
+        ~Node() 
+        {
+            
+        }
 
 };

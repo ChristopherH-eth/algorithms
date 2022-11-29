@@ -2,40 +2,51 @@
 
 #include <iostream>
 #include <vector>
+
 #include "Stack.h"
 
 /**
  * @file IntStack.h
  * @author Original JAVA by William Fiset (william.alexandre.fiset@gmail.com)
- *         C++ conversion by 0xChristopher
+ *      C++ conversion by 0xChristopher
  * @brief The IntStack class inherits the Stack class and elaborates on the design to create a workable stack
- *        for integers. It allows the user to add and remove elements, check the value at the top of the 
- *        stack, clear the stack and increase capacity.
+ *      for integers. It allows the user to add and remove elements, check the value at the top of the 
+ *      stack, clear the stack and increase capacity.
  */
 
 template <typename T>
 
 class IntStack : public Stack<T> {
 
+    // Check instantiation type (valid: double, float, int, char)
+    static_assert(std::is_same<T, int>::value, "Invalid type");
+
     private:
-        std::vector<int> stackVector;       /// Vector representation of a stack
-        int position = 0;                   /// Tracks the top of the stack
-        int capacity = 0;                   /// Capacity of the stack
-        int elem = 0;                       /// Element at given position
+        std::vector<int> stackVector;       // Vector representation of a stack
+        int position = 0;                   // Tracks the top of the stack
+        int capacity = 0;                   // Capacity of the stack
+        int elem = 0;                       // Element at given position
 
     public:
         /**
          * @brief IntStack constructor and destructor
          */
-        IntStack() {}
+        IntStack() 
+        {
 
-        ~IntStack() {}
+        }
+
+        ~IntStack() 
+        {
+
+        }
 
         /**
          * @brief The size() function returns the size of the stack.
          * @return Returns the number of elements on the stack
          */
-        int Size() {
+        int Size() 
+        {
             return position;
         }
 
@@ -43,7 +54,8 @@ class IntStack : public Stack<T> {
          * @brief The isEmpty() function returns true if the stack is empty.
          * @return Returns true if the stack is empty
          */
-        bool IsEmpty() {
+        bool IsEmpty() 
+        {
             return position == 0;
         }
 
@@ -51,7 +63,8 @@ class IntStack : public Stack<T> {
          * @brief The peek() function returns the element at the top of the stack.
          * @return Returns the element at the top of the stack
          */
-        T Peek() {
+        T Peek() 
+        {
             if (position == 0)
                 throw "The stack is empty!";
 
@@ -62,7 +75,8 @@ class IntStack : public Stack<T> {
          * @brief The push() functions adds an element (value) to the top of the stack if maxSize hasn't been reached.
          * @param value The element to be pushed onto the stack
          */
-        void Push(T value) {
+        void Push(T value) 
+        {
             if (position == capacity)
                 IncreaseCapacity();
 
@@ -74,7 +88,8 @@ class IntStack : public Stack<T> {
          * @brief The pop() function removes the element from the top of the stack.
          * @return Returns the element popped off the stack
          */
-        T Pop() {
+        T Pop() 
+        {
             if (position == 0)
                 throw "The stack is empty!";
             else if (stackVector.size() > position)
@@ -91,15 +106,19 @@ class IntStack : public Stack<T> {
 
         /**
          * @brief The increaseCapacity() function increases the capacity of the stack if max capacity
-         * is reached.
+         *      is reached.
          */
-        void IncreaseCapacity() {
+        void IncreaseCapacity() 
+        {
             std::cout << "Maximum capacity reached; increasing stack capacity..." << std::endl;
 
-            if (position == 0) {
+            if (position == 0) 
+            {
                 capacity += 1;
                 stackVector.resize(capacity);
-            } else {
+            } 
+            else 
+            {
                 capacity *= 2;
                 stackVector.resize(capacity);
             }
@@ -108,23 +127,27 @@ class IntStack : public Stack<T> {
         /**
          * @brief The clearStack() function clears all elements in the stack.
          */
-        void ClearStack() {
+        void ClearStack() 
+        {
             stackVector.clear();
             position = 0;
             capacity = 0;
         }
 
-        /************ Test Functions ************/
+        /* Test Functions */
 
-        int VectorSize() {
+        int VectorSize() 
+        {
             return stackVector.size();
         }
 
-        int GetPosition() {
+        int GetPosition() 
+        {
             return position;
         }
 
-        int GetCapacity() {
+        int GetCapacity() 
+        {
             return capacity;
         }
     
